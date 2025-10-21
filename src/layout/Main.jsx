@@ -1,9 +1,12 @@
 import { Outlet } from "react-router-dom";
+import MiniNavbar from "../pages/MiniNavbar/MiniNavbar";
+import Navbar from "../pages/Navbar/Navbar";
 
 const Main = () => {
     return (
         <div>
-            main layout
+            <MiniNavbar></MiniNavbar>
+            <Navbar></Navbar>
             <Outlet></Outlet>
         </div>
     );
