@@ -11,16 +11,16 @@ const Slider = () => {
   return (
     <div className="w-full overflow-hidden">
       <Swiper
+        className="mySwiper w-full h-[300px] md:h-[700px]"
         spaceBetween={0}
         effect={"fade"}
         loop={true}
         autoplay={{
           delay: 4000,
-          disableOnInteraction: false,
+          disableOnInteraction: false
         }}
         pagination={{ clickable: true }}
         modules={[Pagination, Autoplay, EffectFade]}
-        className="w-full h-[300px] md:h-[700px]"
       >
         {[banner1, banner2].map((img, idx) => (
           <SwiperSlide key={idx} className="w-full h-full">
