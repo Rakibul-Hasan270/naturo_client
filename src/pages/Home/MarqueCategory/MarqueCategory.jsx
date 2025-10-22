@@ -8,18 +8,28 @@ import { Link } from "react-router-dom";
 const MarqueCategory = () => {
   const [items, isLoading] = useAllItem();
 
-  // keen-slider setup
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
     mode: "free",
     renderMode: "performance",
+    drag: true,
     slides: {
-      perView: 6,      // একসাথে কয়টা আইটেম দেখাবে
-      spacing: 15,     // slide gap
+      perView: 10,
+      spacing: 15,
+    },
+    breakpoints: {
+      "(max-width: 1024px)": {
+        slides: { perView: 6, spacing: 12 },
+      },
+      "(max-width: 768px)": {
+        slides: { perView: 4, spacing: 10 },
+      },
+      "(max-width: 480px)": {
+        slides: { perView: 3, spacing: 8 },
+      },
     },
   });
 
-  // autoplay effect
   useEffect(() => {
     let timeout;
     const next = () => {
@@ -33,33 +43,24 @@ const MarqueCategory = () => {
     const autoPlay = () => {
       timeout = setInterval(() => {
         next();
-      }, 2500); // প্রতি ১.৫ সেকেন্ডে slide move করবে
+      }, 2500);
     };
     autoPlay();
     return () => clearInterval(timeout);
   }, [instanceRef]);
 
   if (isLoading) return <Loading />;
-
   return (
     <div className="bg-cyan-900 py-4">
-      <div
-        ref={sliderRef}
-        className="keen-slider max-w-6xl mx-auto"
-      >
-        {items.map((item, i) => (
-          <Link
-            key={i}
-            className="keen-slider__slide 
-                       border border-white/20 rounded-lg 
-                       text-white font-semibold 
-                       flex justify-center items-center 
-                       max-w-[120px] h-[60px] 
-                       text-center"
-          >
-            {item.category}
-          </Link>
-        ))}
+      <div ref={sliderRef} className="keen-slider max-w-6xl mx-auto">
+        {
+          items.map((item, i) => (
+            <Link
+              key={i} className="keen-slider__slide border border-white/20 rounded-lg text-white font-semibold flex justify-center items-center max-w-[120px] h-[60px] text-center">
+              {item.category}
+            </Link>
+          ))
+        }
       </div>
     </div>
   );
