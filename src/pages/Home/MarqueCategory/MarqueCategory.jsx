@@ -6,7 +6,7 @@ import "keen-slider/keen-slider.min.css";
 import { Link } from "react-router-dom";
 
 const MarqueCategory = () => {
-  const [items, isLoading] = useAllItem();
+  const [products, isLoading] = useAllItem();
 
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
@@ -54,7 +54,7 @@ const MarqueCategory = () => {
     <div className="bg-cyan-900 py-4">
       <div ref={sliderRef} className="keen-slider max-w-6xl mx-auto">
         {
-          items.map((item, i) => (
+          products.map((item, i) => (
             <Link
               key={i} className="keen-slider__slide border border-white/20 rounded-lg text-white font-semibold flex justify-center items-center max-w-[120px] h-[60px] text-center">
               {item.category}

@@ -6,7 +6,7 @@ import "keen-slider/keen-slider.min.css";
 import Cart from "../../../components/Cart/Cart";
 
 const BestSeller = () => {
-  const [items, isLoading] = useAllItem();
+  const [products, isLoading] = useAllItem();
 
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
@@ -52,7 +52,7 @@ const BestSeller = () => {
       </h2>
 
       <div ref={sliderRef} className="keen-slider">
-        {items.map((item) => (
+        {products.map((item) => (
           <div key={item._id} className="keen-slider__slide">
             <Cart item={item} />
           </div>

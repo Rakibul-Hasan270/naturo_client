@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const useAllItem = () => {
     const axiosPublic = useAxiosPublic();
 
-    const { data: items = [], isLoading, refetch } = useQuery({
+    const { data: products = [], isLoading, refetch } = useQuery({
         queryKey: ['all_items'],
         queryFn: async () => {
             try {
@@ -17,7 +17,7 @@ const useAllItem = () => {
             }
         }
     })
-    return [items, isLoading, refetch];
+    return [products, isLoading, refetch];
 };
 
 export default useAllItem;
