@@ -1,20 +1,21 @@
 import { FaBagShopping, FaBangladeshiTakaSign } from "react-icons/fa6";
 import { useLoaderData } from "react-router-dom";
-import { useState } from "react";
+import { useContext } from "react";
 import CartDrawer from "../CartDrawer/CartDrawer";
+import { CartContext } from "../../provider/CartProvider/CartProvider";
 
 const ProductDetails = () => {
-    const item = useLoaderData();
-    const { name, presentPrice, pastPrice, image, category, _id } = item;
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const product = useLoaderData();
+    const { name, presentPrice, pastPrice, image, category, _id } = product;
+    const { setCartItems, drawerOpen, setDrawerOpen } = useContext(CartContext);
 
     const handleAddToCart = (id) => {
         const storedCart = JSON.parse(localStorage.getItem('products')) || [];
         if (!storedCart.includes(id)) {
             storedCart.push(id);
+            localStorage.setItem('products', JSON.stringify(storedCart));
+            setCartItems(prev => [...prev, id]);
         }
-        localStorage.setItem('products', JSON.stringify(storedCart));
-        console.log("✅ Added to cart:", storedCart);
         setDrawerOpen(true);
     };
 

@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import CartDrawer from "../../components/CartDrawer/CartDrawer";
+import { CartContext } from "../../provider/CartProvider/CartProvider";
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
+    const { cartItems, drawerOpen, setDrawerOpen } = useContext(CartContext);
 
     return (
-        <div className="bg-cyan-900 text-white">
+        <div className="bg-cyan-900 text-white sticky top-0 z-50 shadow-md">
             <div className="max-w-6xl mx-auto p-3 flex items-center justify-between gap-4 relative">
                 {/* Logo Section */}
-                <Link to='/' className="flex items-center gap-2.5">
+                <Link to="/" className="flex items-center gap-2.5">
                     <img
                         className="w-10 h-10 rounded-full"
                         src="/natero_logo.png"
@@ -70,16 +73,22 @@ const Navbar = () => {
                 </div>
 
                 {/* Cart Section */}
-                <div className="flex items-center gap-1 text-sm">
+                <div
+                    className="flex items-center gap-1 text-sm cursor-pointer"
+                    onClick={() => setDrawerOpen(true)}
+                >
                     <div className="relative">
                         <MdOutlineShoppingCart className="text-2xl" />
                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 rounded-full">
-                            0
+                            {cartItems.length}
                         </span>
                     </div>
                     <p className="hidden sm:block">Cart</p>
                 </div>
             </div>
+
+            {/* Cart Drawer */}
+            {drawerOpen && <CartDrawer onClose={() => setDrawerOpen(false)} />}
         </div>
     );
 };
