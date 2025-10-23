@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Cart from "../Cart/Cart";
 import Loading from "../Loading/Loading";
 
-const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, subTitle }) => {
+const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, subTitle, isInsideDrawer }) => {
 
     const [sliderRef, instanceRef] = useKeenSlider({
         loop: true,
@@ -11,18 +11,18 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
         renderMode: "performance",
         drag: true,
         slides: {
-            perView: 2, // default (mobile-first)
+            perView: 2,
             spacing: 10,
         },
         breakpoints: {
             "(max-width: 600px)": {
-                slides: { perView: 2, spacing: 10 }, // 👈 small device
+                slides: { perView: 1, spacing: 10 }
             },
             "(min-width: 768px)": {
-                slides: { perView: 3, spacing: 20 }, // 👈 tablet
+                slides: { perView: 3, spacing: 20 }
             },
             "(min-width: 1024px)": {
-                slides: { perView: 4, spacing: 25 }, // 👈 desktop
+                slides: { perView: 4, spacing: 25 }
             },
         },
     });
@@ -42,7 +42,7 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
     if (isLoading) return <Loading />;
 
     return (
-        <div className="my-10 max-w-6xl mx-auto">
+        <div className={`my-10 ${isInsideDrawer ? "w-full" : "max-w-6xl mx-auto"}`}>
             {/* Section Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
                 <p className="text-3xl font-bold">{sectionTitle}</p>

@@ -51,13 +51,13 @@ const MarqueCategory = () => {
 
   if (isLoading) return <Loading />;
   return (
-    <div className="bg-cyan-900 py-4">
+    <div className="bg-[#CAE9D7] py-4">
       <div ref={sliderRef} className="keen-slider max-w-6xl mx-auto">
         {
           products.map((item, i) => (
-            <Link
-              key={i} className="keen-slider__slide border border-white/20 rounded-lg text-white font-semibold flex justify-center items-center max-w-[120px] h-[60px] text-center">
-              {item.category}
+            <Link key={i} className="keen-slider__slide font-semibold flex flex-col items-center justify-center h-20 text-center">
+              <img className="h-12 w-12 md:h-14 md:w-14 object-contain" src={item.logo} alt="" />
+              <h2 className="text-gray-700 hover:text-[#5caa7b]">{item.category}</h2>
             </Link>
           ))
         }

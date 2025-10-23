@@ -11,7 +11,7 @@ const CartDrawer = ({ onClose }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isClosing, setIsClosing] = useState(false);
     const [isOpening, setIsOpening] = useState(true);
-    const [addition, setAddition] = useState(0);
+    const [quantities, setQuantities] = useState(1);
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("products")) || [];
@@ -20,6 +20,15 @@ const CartDrawer = ({ onClose }) => {
 
         setTimeout(() => setIsOpening(false), 20);
     }, [products]);
+
+    useEffect(() => {
+        const initialQuantities = {};
+        cartItems.forEach((item) => {
+            initialQuantities[item._id] = 1;
+        });
+        setQuantities(initialQuantities);
+    }, [cartItems]);
+
 
     const handelDeleteProduct = (id) => {
         Notiflix.Confirm.show(
@@ -61,20 +70,40 @@ const CartDrawer = ({ onClose }) => {
         }
     };
 
-    const handelAddition = product => {
-        setAddition(addition + 1);
-        console.log(product.presentPrice);
-    }
+    // 🔹 Increase Quantity (max = 5)
+    const handleAddition = (product) => {
+        setQuantities((prev) => {
+            const current = prev[product._id] || 1;
+            if (current >= 5) return prev; // limit = 5
+            return { ...prev, [product._id]: current + 1 };
+        });
+    };
+
+
+    // 🔹 Decrease Quantity (min = 1)
+    const handleSubtraction = (product) => {
+        setQuantities((prev) => {
+            const current = prev[product._id] || 1;
+            if (current <= 1) return prev; // limit = 1
+            return { ...prev, [product._id]: current - 1 };
+        });
+    };
+
+    // 🔹 Calculate total price per product
+    const getTotalPrice = (product) => {
+        const qty = quantities[product._id] || 1;
+        return product.presentPrice * qty;
+    };
+
 
     return (
         <div className="fixed inset-0 bg-black/30 flex justify-end z-50" onClick={handleCloseDrawer}>
-            <div
-                className={`bg-white dark:bg-gray-800 w-[350px] md:w-[600px] h-full p-5 shadow-lg transform transition-transform duration-300 ${isClosing
+            <div className={`bg-white dark:bg-gray-800 w-full md:w-[600px] h-full p-5 shadow-lg transform transition-transform duration-300 ${isClosing
+                ? "translate-x-full"
+                : isOpening
                     ? "translate-x-full"
-                    : isOpening
-                        ? "translate-x-full"
-                        : "translate-x-0"
-                    }`}
+                    : "translate-x-0"
+                }`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* header */}
@@ -82,12 +111,15 @@ const CartDrawer = ({ onClose }) => {
                     <div className="md:flex items-center justify-between w-full">
                         <h2
                             onClick={handleCloseDrawer}
-                            className="text-[13px] flex items-center gap-2 cursor-pointer"
+                            className="text-[13px] md:flex items-center gap-2 cursor-pointer hidden"
                         >
                             <IoArrowBack /> Continue Shopping
                         </h2>
-                        <h2 className="text-2xl font-bold">Your Cart</h2>
-                        <h2 className="border px-2 py-1 rounded-full">{cartItems.length}</h2>
+                        <div className="flex justify-between md:block">
+                            <h2 className="text-2xl font-bold">Your Cart</h2>
+                            <h2 className="md:hidden px-2 py-1 rounded-full flex items-center"><FaBangladeshiTakaSign className="text-xs"></FaBangladeshiTakaSign><span className="font-bold">{cartItems.reduce((p, c) => p + c.presentPrice, 0)}</span></h2>
+                        </div>
+                        <h2 className="border hidden md:block px-2 py-1 rounded-full">{cartItems.length}</h2>
                     </div>
                 </div>
 
@@ -113,32 +145,37 @@ const CartDrawer = ({ onClose }) => {
                                             alt={product.name}
                                             className="w-16 h-16 object-cover rounded-md"
                                         />
-                                        <div className="md:w-[300px]">
+                                        <div className="flex md:flex-col justify-between md:w-[300px]">
                                             <h2>{product.name}</h2>
+
+                                            {/* ------------------  */}
                                             <div className="flex gap-3 mt-3.5">
-                                                <p className="border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer">
+                                                <p onClick={() => handleSubtraction(product)} className="border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer">
                                                     -
                                                 </p>
                                                 <p className="border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer">
-                                                    {addition}
+                                                    {quantities[product._id] || 1}
                                                 </p>
-                                                <p onClick={() => handelAddition(product)} className="border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer">
+                                                <p onClick={() => handleAddition(product)} className={`border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer select-none ${(quantities[product._id] || 1) >= 5 ? "opacity-50 cursor-not-allowed" : ""
+                                                    }`}>
                                                     +
                                                 </p>
                                             </div>
+
+
                                         </div>
                                     </div>
                                     <div>
                                         <div
                                             onClick={() => handelDeleteProduct(product._id)}
-                                            className="text-xl mb-4 flex justify-end cursor-pointer"
+                                            className="text-xl mb-4 md:flex justify-end cursor-pointer hidden"
                                         >
                                             <RiDeleteBin5Line />
                                         </div>
-                                        <div>
+                                        <div className="hidden md:block">
                                             <h3 className="flex items-center">
                                                 <FaBangladeshiTakaSign className="text-xs" />
-                                                <span className="font-bold">{product.presentPrice}</span>
+                                                <span className="font-bold">{getTotalPrice(product)}</span>
                                             </h3>
                                         </div>
                                     </div>
@@ -147,7 +184,7 @@ const CartDrawer = ({ onClose }) => {
                             <div className="mt-12">
                                 <h2 className="text-3xl font-bold">You'll also love</h2>
                                 <div>
-                                    <CommonCartSection products={products} isLoading={isLoading}></CommonCartSection>
+                                    <CommonCartSection products={products} isLoading={isLoading} isInsideDrawer={true}></CommonCartSection>
                                 </div>
                             </div>
                         </div>

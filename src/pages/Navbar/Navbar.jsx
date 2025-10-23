@@ -5,91 +5,97 @@ import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import CartDrawer from "../../components/CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
+import logo from "../../assets/Logo/logo.png";
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
     const { cartItems, drawerOpen, setDrawerOpen } = useContext(CartContext);
 
     return (
-        <div className="bg-cyan-900 text-white sticky top-0 z-50 shadow-md">
-            <div className="max-w-6xl mx-auto p-3 flex items-center justify-between gap-4 relative">
-                {/* Logo Section */}
-                <Link to="/" className="flex items-center gap-2.5">
-                    <img
-                        className="w-10 h-10 rounded-full"
-                        src="/natero_logo.png"
-                        alt="Naturo logo"
-                    />
-                    <div className="hidden sm:block leading-4">
-                        <p className="uppercase text-2xl font-bold relative">
-                            Naturo
-                            <sup className="text-[10px] absolute top-2">TM</sup>
-                        </p>
-                        <p className="text-[10px] tracking-[3px] font-semibold whitespace-nowrap">
-                            BACK TO NATURE
-                        </p>
-                    </div>
-                </Link>
-
-                {/* Search Section */}
-                <div className="flex-1 max-w-lg relative">
-                    {/* md+: full searchbar visible */}
-                    <div className="hidden md:flex items-center gap-2 bg-gray-900 text-white px-3 py-2 rounded-md">
-                        <IoIosSearch className="text-gray-400 text-lg" />
-                        <input
-                            type="search"
-                            placeholder="Search in Naturo..."
-                            className="w-full bg-transparent text-sm placeholder-gray-400 outline-none font-semibold"
+        <nav className="bg-[#003315] text-white sticky top-0 z-50 shadow-md transition-all duration-300">
+            <div
+                className={`max-w-[1500px] mx-auto px-4 flex items-center justify-between gap-4 transition-all duration-300 ${showSearch ? "py-4 flex-col md:flex-row" : "py-4"
+                    }`}
+            >
+                {/* ---------- Left: Logo ---------- */}
+                <div className="flex items-center justify-between w-full md:w-auto">
+                    <Link to="/" className="flex items-center">
+                        <img
+                            src={logo}
+                            alt="Naturo logo"
+                            className="h-10 w-auto object-contain"
                         />
-                    </div>
+                    </Link>
 
-                    {/* mobile: only icon */}
-                    <div className="flex md:hidden justify-end">
+                    {/* ---------- Right: Icons (Mobile) ---------- */}
+                    <div className="flex items-center gap-4 md:hidden">
+                        {/* Cart */}
+                        <div
+                            className="relative cursor-pointer"
+                            onClick={() => setDrawerOpen(true)}
+                        >
+                            <MdOutlineShoppingCart className="text-2xl" />
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 rounded-full">
+                                {cartItems.length}
+                            </span>
+                        </div>
+
+                        {/* Search toggle */}
                         {showSearch ? (
                             <RxCross2
-                                className="text-2xl text-gray-200 cursor-pointer transition-transform duration-200 hover:rotate-90"
+                                className="text-2xl cursor-pointer transition-transform duration-200 hover:rotate-90"
                                 onClick={() => setShowSearch(false)}
                             />
                         ) : (
                             <IoIosSearch
-                                className="text-2xl text-gray-200 cursor-pointer"
+                                className="text-2xl cursor-pointer"
                                 onClick={() => setShowSearch(true)}
                             />
                         )}
                     </div>
-
-                    {/* mobile search input toggle */}
-                    {showSearch && (
-                        <div className="absolute top-full left-0 w-full bg-gray-900 mt-2 rounded-md flex items-center gap-2 px-3 py-2 animate-fadeIn z-10">
-                            <IoIosSearch className="text-gray-400 text-lg" />
-                            <input
-                                type="search"
-                                placeholder="Search in Naturo..."
-                                className="w-full bg-transparent text-sm placeholder-gray-400 outline-none font-semibold"
-                                autoFocus
-                            />
-                        </div>
-                    )}
                 </div>
 
-                {/* Cart Section */}
+                {/* ---------- Search bar (Desktop) ---------- */}
+                <div className="hidden md:flex items-center gap-2 bg-[#000F06] px-3 py-3 w-[1100px]">
+                    <IoIosSearch className="text-[#25B672] text-lg" />
+                    <input
+                        type="search"
+                        placeholder="Search in Naturo..."
+                        className="w-full bg-transparent text-sm placeholder-[#25B672] outline-none font-semibold text-[#CAE9D7]"
+                    />
+                </div>
+
+                {/* ---------- Right side (Desktop) ---------- */}
                 <div
-                    className="flex items-center gap-1 text-sm cursor-pointer"
+                    className="hidden md:flex items-center gap-1 text-sm cursor-pointer"
                     onClick={() => setDrawerOpen(true)}
                 >
                     <div className="relative">
                         <MdOutlineShoppingCart className="text-2xl" />
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 rounded-full">
+                        <span className="absolute -top-2 -right-2 bg-[#EF4444] text-white text-[10px] px-1.5 rounded-full">
                             {cartItems.length}
                         </span>
                     </div>
-                    <p className="hidden sm:block">Cart</p>
+                    <p>Cart</p>
                 </div>
+
+                {/* ---------- Search Input (Mobile Expand) ---------- */}
+                {showSearch && (
+                    <div className="w-full bg-[#001D0C] flex items-center gap-2 px-3 py-3 animate-fadeIn">
+                        <IoIosSearch className="text-[#25B672] text-lg" />
+                        <input
+                            type="search"
+                            placeholder="Search in Naturo..."
+                            className="w-full bg-transparent text-sm placeholder-[#25B672] outline-none font-semibold"
+                            autoFocus
+                        />
+                    </div>
+                )}
             </div>
 
-            {/* Cart Drawer */}
+            {/* ---------- Cart Drawer ---------- */}
             {drawerOpen && <CartDrawer onClose={() => setDrawerOpen(false)} />}
-        </div>
+        </nav>
     );
 };
 
