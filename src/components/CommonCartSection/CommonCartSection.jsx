@@ -11,48 +11,47 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
         renderMode: "performance",
         drag: true,
         slides: {
-            perView: 2,
-            spacing: 15,
+            perView: 2, // default (mobile-first)
+            spacing: 10,
         },
         breakpoints: {
+            "(max-width: 600px)": {
+                slides: { perView: 2, spacing: 10 }, // 👈 small device
+            },
             "(min-width: 768px)": {
-                slides: { perView: 3, spacing: 20 },
+                slides: { perView: 3, spacing: 20 }, // 👈 tablet
             },
             "(min-width: 1024px)": {
-                slides: { perView: 4, spacing: 25 },
+                slides: { perView: 4, spacing: 25 }, // 👈 desktop
             },
         },
     });
 
     useEffect(() => {
-        let timeout;
-        const next = () => {
+        const interval = setInterval(() => {
             if (instanceRef.current) {
                 instanceRef.current.moveToIdx(
                     instanceRef.current.track.details.abs + 1,
                     true
                 );
             }
-        };
-        timeout = setInterval(() => {
-            next();
         }, 2500);
-        return () => clearInterval(timeout);
+        return () => clearInterval(interval);
     }, [instanceRef]);
 
     if (isLoading) return <Loading />;
 
     return (
         <div className="my-10 max-w-6xl mx-auto">
-
-            <div className="flex items-center gap-10 p-4">
+            {/* Section Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
                 <p className="text-3xl font-bold">{sectionTitle}</p>
-                <p className="flex items-center gap-2 cursor-pointer text-lg">
+                <p className="flex items-center gap-2 cursor-pointer text-lg text-gray-700 dark:text-gray-300">
                     {subTitle} {sectionIcon}
                 </p>
             </div>
 
-
+            {/* Slider */}
             <div ref={sliderRef} className="keen-slider">
                 {products.map((item) => (
                     <div key={item._id} className="keen-slider__slide">

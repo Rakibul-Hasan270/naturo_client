@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import MiniNavbar from "../pages/MiniNavbar/MiniNavbar";
 import Navbar from "../pages/Navbar/Navbar";
+import Footer from "../pages/shared/Footer/Footer";
 
 const Main = () => {
     return (
@@ -8,6 +9,7 @@ const Main = () => {
             <MiniNavbar></MiniNavbar>
             <Navbar></Navbar>
             <Outlet></Outlet>
+            <Footer></Footer>
         </div>
     );
 };
