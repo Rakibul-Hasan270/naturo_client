@@ -5,7 +5,7 @@ import img4 from '../../../assets/Featured/image4.png'
 
 const FeaturedSection = () => {
     return (
-        <div className="bg-[#3DC673] mt-12">
+        <div className="bg-[#3DC673] mt-12 text-white">
             <div className="max-w-6xl mx-auto p-10">
                 <div className="text-center mb-8">
                     <h2 className="uppercase text-4xl font-bold ">we care</h2>

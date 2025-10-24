@@ -24,12 +24,12 @@ const Card = ({ item }) => {
             </div>
 
             <div className="px-3 py-4">
-                <h1 className="h-6 truncate">
+                <h1 className="h-6 truncate font-bold">
                     {name}
                 </h1>
 
                 <div className="flex items-center gap-3 mt-2">
-                    <span className="flex items-center font-semibold text-cyan-400">
+                    <span className="flex items-center font-semibold text-xl text-[#669900]">
                         <FaBangladeshiTakaSign /> {presentPrice}
                     </span>
                     <span className="flex items-center font-semibold line-through">
