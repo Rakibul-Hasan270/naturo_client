@@ -11,18 +11,18 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
         renderMode: "performance",
         drag: true,
         slides: {
-            perView: 2,
-            spacing: 10,
+            perView: isInsideDrawer ? 2 : 4,
+            spacing: isInsideDrawer ? 10 : 25,
         },
         breakpoints: {
             "(max-width: 600px)": {
                 slides: { perView: 1, spacing: 10 }
             },
             "(min-width: 768px)": {
-                slides: { perView: 3, spacing: 20 }
+                slides: { perView: isInsideDrawer ? 2 : 3, spacing: isInsideDrawer ? 15 : 20 }
             },
             "(min-width: 1024px)": {
-                slides: { perView: 4, spacing: 25 }
+                slides: { perView: isInsideDrawer ? 2 : 4, spacing: isInsideDrawer ? 15 : 25 }
             },
         },
     });
@@ -40,9 +40,9 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
     }, [instanceRef]);
 
     if (isLoading) return <Loading />;
+
     return (
-        <div className={`my-10 ${isInsideDrawer ? "w-full" : "max-w-6xl mx-auto"}`}>
-            {/* Section Header */}
+        <div className={`my-8 ${isInsideDrawer ? "w-full" : "max-w-7xl mx-auto"}`}>
             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-10 mb-4">
                 <p className="text-xl md:text-3xl font-bold">{sectionTitle}</p>
                 <Link to={`/view-more/${sectionTitle}`} className="flex items-center gap-2 cursor-pointer text-lg">
@@ -50,7 +50,6 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
                 </Link>
             </div>
 
-            {/* Slider */}
             <div ref={sliderRef} className="keen-slider">
                 {products.map((item) => (
                     <div key={item._id} className="keen-slider__slide">

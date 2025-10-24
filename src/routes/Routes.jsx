@@ -16,12 +16,12 @@ const router = createBrowserRouter([
             {
                 path: '/product-details/:id',
                 element: <ProductDetails></ProductDetails>,
-                loader: ({ params }) => fetch(`http://localhost:9000/items/${params.id}`)
+                loader: ({ params }) => fetch(`https://naturo-server.vercel.app/items/${params.id}`)
             },
             {
                 path: '/view-more/:category',
                 element: <ViewMore></ViewMore>,
-                loader: ({ params }) => fetch(`http://localhost:9000/categorys/${params.category}`)
+                loader: ({ params }) => fetch(`https://naturo-server.vercel.app/categorys/${params.category}`)
             }
         ]
     }

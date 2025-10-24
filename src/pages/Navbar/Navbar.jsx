@@ -27,7 +27,7 @@ const Navbar = () => {
         if (search.trim() === "") return;
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:9000/items?search=${encodeURIComponent(search)}`);
+                const res = await fetch(`https://naturo-server.vercel.app/items?search=${encodeURIComponent(search)}`);
                 const data = await res.json();
                 setSearchData(data);
             } catch (error) {
@@ -64,7 +64,7 @@ const Navbar = () => {
                         <img
                             src={logo}
                             alt="Naturo logo"
-                            className="h-10 w-auto object-contain"
+                            className="h-12 w-auto object-contain"
                         />
                     </Link>
 

@@ -63,10 +63,8 @@ const CartDrawer = ({ onClose }) => {
     const handleCloseDrawer = () => {
         if (!isClosing) {
             setIsClosing(true);
-            setTimeout(() => {
-                onClose();
-                setIsClosing(false);
-            }, 300);
+            onClose();
+            setIsClosing(false);
         }
     };
 
@@ -78,7 +76,6 @@ const CartDrawer = ({ onClose }) => {
             return { ...prev, [product._id]: current + 1 };
         });
     };
-
 
     // 🔹 Decrease Quantity (min = 1)
     const handleSubtraction = (product) => {
@@ -97,8 +94,8 @@ const CartDrawer = ({ onClose }) => {
 
 
     return (
-        <div className="fixed inset-0 bg-black/30 flex justify-end z-50" onClick={handleCloseDrawer}>
-            <div className={`bg-white dark:bg-gray-800 w-full md:w-[600px] h-full p-5 shadow-lg transform transition-transform duration-300 ${isClosing
+        <div className="fixed inset-0 flex text-black justify-end z-50" onClick={handleCloseDrawer}>
+            <div className={`bg-white w-full md:w-[560px] h-full p-5 shadow-lg transform transition-transform duration-300 ${isClosing
                 ? "translate-x-full"
                 : isOpening
                     ? "translate-x-full"
@@ -115,11 +112,11 @@ const CartDrawer = ({ onClose }) => {
                         >
                             <IoArrowBack /> Continue Shopping
                         </h2>
-                        <div className="flex justify-between md:block">
+                        <div className="flex justify-between md:block mr-24">
                             <h2 className="text-2xl font-bold">Your Cart</h2>
                             <h2 className="md:hidden px-2 py-1 rounded-full flex items-center"><FaBangladeshiTakaSign className="text-xs"></FaBangladeshiTakaSign><span className="font-bold">{cartItems.reduce((p, c) => p + c.presentPrice, 0)}</span></h2>
                         </div>
-                        <h2 className="border hidden md:block px-2 py-1 rounded-full">{cartItems.length}</h2>
+                        <h2 className="border-2 font-bold hidden md:block px-2 py-1 rounded-full">{cartItems.length}</h2>
                     </div>
                 </div>
 
@@ -137,26 +134,26 @@ const CartDrawer = ({ onClose }) => {
                             {cartItems.map((product) => (
                                 <li
                                     key={product._id}
-                                    className="shadow-2xl p-3 rounded-md flex items-center justify-between gap-3"
+                                    className="p-3 shadow rounded-md flex items-center justify-between gap-3"
                                 >
                                     <div className="flex items-center gap-3">
                                         <img
                                             src={product.image}
                                             alt={product.name}
-                                            className="w-16 h-16 object-cover rounded-md"
+                                            className="w-18 h-18 object-cover rounded-md"
                                         />
-                                        <div className="flex md:flex-col justify-between md:w-[300px]">
+                                        <div className="flex md:flex-col text-[18px] font-semibold justify-between md:w-[300px]">
                                             <h2>{product.name}</h2>
 
                                             {/* ------------------  */}
                                             <div className="flex gap-3 mt-3.5">
-                                                <p onClick={() => handleSubtraction(product)} className="border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer">
+                                                <p onClick={() => handleSubtraction(product)} className="border border-[#E5E7EB] text-[#8B8B8B] flex items-center justify-center w-8 h-8 cursor-pointer">
                                                     -
                                                 </p>
-                                                <p className="border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer">
+                                                <p className="border border-[#E5E7EB] text-[#8B8B8B] flex items-center justify-center w-8 h-8 cursor-pointer text-xs">
                                                     {quantities[product._id] || 1}
                                                 </p>
-                                                <p onClick={() => handleAddition(product)} className={`border border-gray-600 flex items-center justify-center w-12 py-2 cursor-pointer select-none ${(quantities[product._id] || 1) >= 5 ? "opacity-50 cursor-not-allowed" : ""
+                                                <p onClick={() => handleAddition(product)} className={`border border-[#E5E7EB] text-[#8B8B8B] flex items-center justify-center w-8 h-8 cursor-pointer select-none ${(quantities[product._id] || 1) >= 5 ? "opacity-50 cursor-not-allowed" : ""
                                                     }`}>
                                                     +
                                                 </p>
@@ -175,7 +172,7 @@ const CartDrawer = ({ onClose }) => {
                                         <div className="hidden md:block">
                                             <h3 className="flex items-center">
                                                 <FaBangladeshiTakaSign className="text-xs" />
-                                                <span className="font-bold">{getTotalPrice(product)}</span>
+                                                <span className="text-[#1B1B1B]">{getTotalPrice(product)}</span>
                                             </h3>
                                         </div>
                                     </div>
@@ -187,8 +184,19 @@ const CartDrawer = ({ onClose }) => {
                                     <CommonCartSection products={products} isLoading={isLoading} isInsideDrawer={true}></CommonCartSection>
                                 </div>
                             </div>
+                            {/* ------------------------ */}
                         </div>
                     )}
+                </div>
+                <div className="mt-5">
+                    <div className="flex justify-between items-center mb-3">
+                        <h2 className="text-xl font-semibold">Total</h2>
+                        <h2 className="text-xl font-semibold flex items-center">
+                            <FaBangladeshiTakaSign className="text-sm mr-1" />
+                            {cartItems.reduce((sum, product) => sum + getTotalPrice(product), 0)}
+                        </h2>
+                    </div>
+                    <button className="btn w-full bg-[#A0CA4F] border-0">Order Now</button>
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@ const Card = ({ item }) => {
     const { name, presentPrice, pastPrice, image, _id } = item;
 
     return (
-        <Link to={`/product-details/${_id}`} className="w-full overflow-hidden rounded-lg border-b shadow-2xl">
+        <Link to={`/product-details/${_id}`} className="w-full overflow-hidden rounded-lg">
             <img
                 className="w-full h-56 object-cover object-center transition-transform duration-300 ease-in-out hover:scale-110"
                 src={image}

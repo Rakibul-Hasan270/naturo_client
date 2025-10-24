@@ -3,6 +3,7 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Loading from "../../components/Loading/Loading";
+import Cart from '../../components/Cart/Cart';
 
 const ViewMore = () => {
     const { category } = useParams();
@@ -21,12 +22,16 @@ const ViewMore = () => {
             }
         }
     })
-
+    console.log(products);
     if (isLoading) return <Loading />;
     return (
-        <div>
-            <h2>view more: {products.length}</h2>
-            <p className="text-red-600 text-center text-4xl">Kaj Baki ase</p>
+        <div className="max-w-7xl mx-auto mt-12 mb-12">
+            <h2 className="text-center text-3xl font-bold mb-12">{category}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                {
+                    products.map(product => <Cart key={product._id} item={product}></Cart>)
+                }
+            </div>
         </div>
     );
 };

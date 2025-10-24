@@ -4,7 +4,7 @@ import { MdEmail, MdLocationPin } from "react-icons/md";
 const Footer = () => {
     return (
         <footer className="bg-[#003315] text-[#1FB757]">
-            <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
                 {/* --- Left Section --- */}
                 <div>
                     <h2 className="text-3xl font-bold text-green-400 mb-2">Naturo</h2>
@@ -52,7 +52,7 @@ const Footer = () => {
 
             {/* --- Social Media --- */}
             <div className="border-t border-gray-700 mt-6 pt-6">
-                <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-sm text-gray-400 text-center md:text-left">
                         © 2025 <span className="text-green-400 font-semibold">Naturo</span>. All Rights Reserved.
                     </p>
