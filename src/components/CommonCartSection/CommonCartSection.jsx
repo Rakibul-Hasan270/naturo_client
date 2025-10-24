@@ -2,9 +2,9 @@ import { useKeenSlider } from "keen-slider/react";
 import { useEffect } from "react";
 import Cart from "../Cart/Cart";
 import Loading from "../Loading/Loading";
+import { Link } from "react-router-dom";
 
 const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, subTitle, isInsideDrawer }) => {
-
     const [sliderRef, instanceRef] = useKeenSlider({
         loop: true,
         mode: "free",
@@ -40,15 +40,14 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
     }, [instanceRef]);
 
     if (isLoading) return <Loading />;
-
     return (
         <div className={`my-10 ${isInsideDrawer ? "w-full" : "max-w-6xl mx-auto"}`}>
             {/* Section Header */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
-                <p className="text-3xl font-bold">{sectionTitle}</p>
-                <p className="flex items-center gap-2 cursor-pointer text-lg text-gray-700 dark:text-gray-300">
+            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-10 mb-4">
+                <p className="text-xl md:text-3xl font-bold">{sectionTitle}</p>
+                <Link to={`/view-more/${sectionTitle}`} className="flex items-center gap-2 cursor-pointer text-lg">
                     {subTitle} {sectionIcon}
-                </p>
+                </Link>
             </div>
 
             {/* Slider */}

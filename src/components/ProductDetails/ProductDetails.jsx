@@ -1,6 +1,6 @@
 import { FaBagShopping, FaBangladeshiTakaSign } from "react-icons/fa6";
 import { useLoaderData } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import CartDrawer from "../CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
 
@@ -8,6 +8,20 @@ const ProductDetails = () => {
     const product = useLoaderData();
     const { name, presentPrice, pastPrice, image, category, _id } = product;
     const { setCartItems, drawerOpen, setDrawerOpen } = useContext(CartContext);
+
+    // save recently viewed product
+    useEffect(() => {
+        if (product?._id) {
+            let viewedIds = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+            const alreadyExists = viewedIds.includes(product._id);
+            if (!alreadyExists) {
+                viewedIds.push(product._id);
+                if (viewedIds.length > 6) viewedIds.shift();
+            }
+            localStorage.setItem("recentlyViewed", JSON.stringify(viewedIds));
+        }
+    }, [product]);
+
 
     const handleAddToCart = (id) => {
         const storedCart = JSON.parse(localStorage.getItem('products')) || [];

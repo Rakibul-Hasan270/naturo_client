@@ -5,16 +5,18 @@ import MarqueCategory from "../MarqueCategory/MarqueCategory";
 import useAllItem from "../../../hooks/useAllItem";
 import AllProduct from "../AllProduct/AllProduct";
 import FeaturedSection from "../FeaturedSection/FeaturedSection";
+import useRecentlyViewed from "../../../hooks/useRecentlyViewed";
 
 const Home = () => {
     const [products, isLoading] = useAllItem();
+    const [recentlyViewedProducts] = useRecentlyViewed();
     return (
         <div>
             <Slider></Slider>
             <MarqueCategory></MarqueCategory>
-
-            {/* Honey section  */}
-            <CommonCartSection sectionTitle='OUR BEST SELLERS' products={products} isLoading={isLoading}></CommonCartSection>
+            
+            {/* best sells section  */}
+            <CommonCartSection sectionTitle='OUR BEST SELLERS' products={products.filter(p => p.best_sell === true)} isLoading={isLoading}></CommonCartSection>
 
             {/* Honey section  */}
             <CommonCartSection sectionIcon={<IoIosArrowForward />} sectionTitle='Honey' subTitle='View More' products={products} isLoading={isLoading}></CommonCartSection>
@@ -26,7 +28,7 @@ const Home = () => {
             <AllProduct></AllProduct>
 
             {/* recently viewed section  */}
-            <CommonCartSection sectionTitle='Recently Viewed' products={products} isLoading={isLoading}></CommonCartSection>
+            {recentlyViewedProducts.length > 0 && <CommonCartSection sectionTitle='Recently Viewed' products={recentlyViewedProducts} isLoading={isLoading}></CommonCartSection>}
 
             {/* featured section  */}
             <FeaturedSection></FeaturedSection>
