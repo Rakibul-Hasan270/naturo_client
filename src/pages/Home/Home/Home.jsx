@@ -6,15 +6,23 @@ import useAllItem from "../../../hooks/useAllItem";
 import AllProduct from "../AllProduct/AllProduct";
 import FeaturedSection from "../FeaturedSection/FeaturedSection";
 import useRecentlyViewed from "../../../hooks/useRecentlyViewed";
+import { useLoadingBar } from "../../../provider/LoadingBarProvider/LoadingBarProvider";
+import { useEffect } from "react";
 
 const Home = () => {
     const [products, isLoading] = useAllItem();
     const [recentlyViewedProducts] = useRecentlyViewed();
+    const { complete } = useLoadingBar();
+
+    useEffect(() => {
+        complete();
+    }, [complete])
+
     return (
         <div>
             <Slider></Slider>
             <MarqueCategory></MarqueCategory>
-            
+
             {/* best sells section  */}
             <CommonCartSection sectionTitle='OUR BEST SELLERS' products={products.filter(p => p.best_sell === true)} isLoading={isLoading}></CommonCartSection>
 

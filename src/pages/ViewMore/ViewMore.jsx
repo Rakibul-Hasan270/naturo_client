@@ -4,17 +4,21 @@ import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Loading from "../../components/Loading/Loading";
 import Cart from '../../components/Cart/Cart';
+import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
 
 const ViewMore = () => {
     const { category } = useParams();
     const axiosPublic = useAxiosPublic();
+    const { start, complete } = useLoadingBar();
 
     const { data: products = [], isLoading } = useQuery({
         queryKey: ['category'],
         enabled: !!category,
         queryFn: async () => {
+            start();
             try {
                 const res = await axiosPublic.get(`/categorys/${category}`);
+                complete();
                 return res.data;
             } catch (error) {
                 console.log(error);

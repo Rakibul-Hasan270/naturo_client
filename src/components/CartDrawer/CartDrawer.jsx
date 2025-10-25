@@ -1,10 +1,11 @@
 import { IoArrowBack } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useAllItem from "../../hooks/useAllItem";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import Notiflix from "notiflix";
 import CommonCartSection from "../CommonCartSection/CommonCartSection";
+import { CartContext } from "../../provider/CartProvider/CartProvider";
 
 const CartDrawer = ({ onClose }) => {
     const [products, isLoading] = useAllItem();
@@ -12,12 +13,12 @@ const CartDrawer = ({ onClose }) => {
     const [isClosing, setIsClosing] = useState(false);
     const [isOpening, setIsOpening] = useState(true);
     const [quantities, setQuantities] = useState(1);
+    const { refreshCart } = useContext(CartContext);
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("products")) || [];
         const matchedItems = products.filter((p) => storedCart.includes(p._id));
         setCartItems(matchedItems);
-
         setTimeout(() => setIsOpening(false), 20);
     }, [products]);
 
@@ -68,7 +69,6 @@ const CartDrawer = ({ onClose }) => {
         }
     };
 
-    // 🔹 Increase Quantity (max = 5)
     const handleAddition = (product) => {
         setQuantities((prev) => {
             const current = prev[product._id] || 1;
@@ -77,39 +77,23 @@ const CartDrawer = ({ onClose }) => {
         });
     };
 
-    // 🔹 Decrease Quantity (min = 1)
     const handleSubtraction = (product) => {
         setQuantities((prev) => {
             const current = prev[product._id] || 1;
             const newQuantity = current - 1;
-
             if (newQuantity === 0) {
                 try {
-                    // 🔹 এখন ধরছি localStorage এ শুধু ID list আছে
                     const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
-
-                    // শুধু ওই id বাদ দিচ্ছি
                     const updatedProducts = storedProducts.filter(
                         (id) => id !== product._id
                     );
-
-                    // আবার save করছি
                     localStorage.setItem("products", JSON.stringify(updatedProducts));
-
-                    // UI থেকেও remove করো
                     setCartItems((prevItems) =>
                         prevItems.filter((item) => item._id !== product._id)
                     );
-
-                    Notiflix.Notify.success("Product removed from cart", { timeout: 1000 });
-                    console.log("✅ Removed from localStorage:", product._id);
+                    refreshCart();
                 } catch (error) {
-                    console.error("❌ Error updating localStorage:", error);
-                    Notiflix.Report.failure(
-                        "Error",
-                        "Failed to remove product. Please try again.",
-                        "OK"
-                    );
+                    console.error("Error updating localStorage:", error);
                 }
             }
 
@@ -118,7 +102,6 @@ const CartDrawer = ({ onClose }) => {
         });
     };
 
-    // 🔹 Calculate total price per product
     const getTotalPrice = (product) => {
         const qty = quantities[product._id] || 1;
         return product.presentPrice * qty;

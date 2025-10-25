@@ -5,16 +5,21 @@ import CartDrawer from "../CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
 import { motion, AnimatePresence } from "motion/react"
 import { useForm } from "react-hook-form";
+import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
 
 const ProductDetails = () => {
     const product = useLoaderData();
+    const { complete } = useLoadingBar();
     const { name, pastPrice, image, category, _id } = product;
-    const { setCartItems, drawerOpen, setDrawerOpen } = useContext(CartContext);
+    const { setCartItems, drawerOpen, setDrawerOpen, refreshCart } = useContext(CartContext);
     const [orderModalOpen, setOrderModalOpen] = useState(false);
     const [quantities, setQuantities] = useState(1);
     const [selected, setSelected] = useState("dhakaCity");
     const { register, formState: { errors }, handleSubmit } = useForm();
 
+    useEffect(() => {
+        complete();
+    }, [complete])
 
     const onSubmit = (data) => {
         console.log("Order Info:", data);
@@ -38,7 +43,7 @@ const ProductDetails = () => {
         if (!storedCart.includes(id)) {
             storedCart.push(id);
             localStorage.setItem('products', JSON.stringify(storedCart));
-            setCartItems(prev => [...prev, id]);
+            refreshCart();
         }
         setDrawerOpen(true);
     };
@@ -156,7 +161,7 @@ const ProductDetails = () => {
                                 <div className="space-y-3 text-gray-700 mt-2">
                                     <div className="flex justify-between">
                                         <h3 className="text-2xl font-bold">সর্বমোট</h3>
-                                        <h3 className="text-xl font-semibold">7755 TK</h3>
+                                        <h3 className="text-xl font-semibold"> {quantities[product._id] || 1} TK</h3>
                                     </div>
 
                                     {/* Example form fields */}
@@ -313,7 +318,7 @@ const ProductDetails = () => {
                                                 {/* Submit Button */}
                                                 <button
                                                     type="submit"
-                                                    className="mt-6 w-full bg-[#FA582D] text-white py-3 rounded-xl font-semibold hover:bg-[#e14c22] transition"
+                                                    className="cursor-pointer mt-6 w-full bg-[#FA582D] text-white py-3 rounded-xl font-semibold hover:bg-[#e14c22] transition"
                                                 >
                                                     অর্ডার নিশ্চিত করুন
                                                 </button>
@@ -321,6 +326,7 @@ const ProductDetails = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <p className="text-center mt-4 font-semibold text-gray-500 text-xs">আমাদের একজন কাস্টমার প্রতিনিধি আপনাকে কল করে আবার নিশ্চিত করবেন।</p>
                             </div>
                         </motion.div>
                     </>

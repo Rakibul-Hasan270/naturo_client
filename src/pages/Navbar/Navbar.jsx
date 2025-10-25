@@ -2,12 +2,13 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartDrawer from "../../components/CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
 import logo from "../../assets/Logo/logo.png";
 import toast from "react-hot-toast";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
+import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
@@ -15,6 +16,8 @@ const Navbar = () => {
     const [search, setSearch] = useState('');
     const [searchData, setSearchData] = useState([]);
     const desktopSearchRef = useRef(null);
+    const navigate = useNavigate();
+    const { start } = useLoadingBar();
 
 
     const handelSearch = event => {
@@ -51,6 +54,11 @@ const Navbar = () => {
         };
     }, []);
 
+    const handelNavigate = () => {
+        start();
+        navigate('/');
+    }
+
 
     return (
         <nav className="bg-[#003315] text-white sticky top-0 z-50 shadow-md transition-all duration-300">
@@ -60,13 +68,13 @@ const Navbar = () => {
             >
                 {/* ---------- Left: Logo ---------- */}
                 <div className="flex items-center justify-between w-full md:w-auto">
-                    <Link to="/" className="flex items-center">
+                    <button onClick={handelNavigate} className="flex items-center">
                         <img
                             src={logo}
                             alt="Naturo logo"
                             className="h-14 w-auto object-contain"
                         />
-                    </Link>
+                    </button>
 
                     {/* ---------- Right: Icons (Mobile) ---------- */}
                     <div className="flex items-center gap-4 md:hidden">
@@ -172,7 +180,7 @@ const Navbar = () => {
 
                         {/* Mobile Search Results Dropdown */}
                         {searchData.length > 0 && (
-                            <div className="absolute top-[57px] left-0 w-full bg-white text-gray-800 shadow-lg max-h-80 overflow-y-auto z-50 p-2">
+                            <div className="absolute top-[60px] rounded-md left-0 w-full bg-white text-gray-800 shadow-lg max-h-80 overflow-y-auto z-50 p-2">
                                 <p className="text-xs text-gray-600 mt-1.5">
                                     Found {searchData.length} results for "{search}"
                                 </p>
