@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import CartDrawer from "../CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
 import { motion, AnimatePresence } from "motion/react"
+import { useForm } from "react-hook-form";
 
 const ProductDetails = () => {
     const product = useLoaderData();
@@ -11,7 +12,14 @@ const ProductDetails = () => {
     const { setCartItems, drawerOpen, setDrawerOpen } = useContext(CartContext);
     const [orderModalOpen, setOrderModalOpen] = useState(false);
     const [quantities, setQuantities] = useState(1);
-    
+    const [selected, setSelected] = useState("dhakaCity");
+    const { register, formState: { errors }, handleSubmit } = useForm();
+
+
+    const onSubmit = (data) => {
+        console.log("Order Info:", data);
+    };
+
     // save recently viewed product
     useEffect(() => {
         if (product?._id) {
@@ -55,6 +63,9 @@ const ProductDetails = () => {
         const qty = quantities[product._id] || 1;
         return product.presentPrice * qty;
     };
+
+
+
 
     return (
         <div className="max-w-7xl bg-[#FFFFFF] mx-auto mt-6 p-4 relative">
@@ -105,6 +116,7 @@ const ProductDetails = () => {
                 <CartDrawer onClose={() => setDrawerOpen(false)} />
             )}
 
+            {/* dropdown for order  */}
             <AnimatePresence>
                 {orderModalOpen && (
                     <>
@@ -150,16 +162,165 @@ const ProductDetails = () => {
                                     {/* Example form fields */}
                                     <div className="mt-4 space-y-3">
                                         <h2 className="text-2xl font-bold text-center">অর্ডার করতে নিচের তথ্যগুলো দিন</h2>
+
+                                        <div>
+                                            <form
+                                                onSubmit={handleSubmit(onSubmit)}
+                                                className="w-full bg-white shadow-md rounded-xl p-6 space-y-5"
+                                            >
+                                                {/* নাম */}
+                                                <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
+                                                    <label className="md:w-40 w-full font-medium text-gray-700">
+                                                        নাম:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        {...register("name", { required: "নাম লিখুন" })}
+                                                        placeholder="আপনার নাম লিখুন"
+                                                        className={`flex-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 ${errors.name ? "border-red-500 focus:ring-red-400" : "border-gray-300"
+                                                            }`}
+                                                    />
+                                                </div>
+                                                {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+
+                                                {/* মোবাইল নম্বর */}
+                                                <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
+                                                    <label className="md:w-40 w-full font-medium text-gray-700">
+                                                        মোবাইল নম্বর:
+                                                    </label>
+                                                    <input
+                                                        type="tel"
+                                                        {...register("mobile", {
+                                                            required: "মোবাইল নম্বর লিখুন",
+                                                            pattern: {
+                                                                value: /^01[0-9]{9}$/,
+                                                                message: "সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন",
+                                                            },
+                                                        })}
+                                                        placeholder="১১ সংখ্যার মোবাইল নম্বর লিখুন"
+                                                        className={`flex-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 ${errors.mobile ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-green-500"
+                                                            }`}
+                                                    />
+                                                </div>
+                                                {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile.message}</p>}
+
+                                                {/* ঠিকানা */}
+                                                <div className="flex flex-col md:flex-row md:items-start gap-3 w-full">
+                                                    <label className="md:w-40 w-full font-medium text-gray-700 mt-2">
+                                                        ঠিকানা:
+                                                    </label>
+                                                    <textarea
+                                                        {...register("address", { required: "ঠিকানা লিখুন", minLength: 10, maxLength: 80 })}
+                                                        placeholder="আপনার ডেলিভারি ঠিকানা লিখুন"
+                                                        rows="2"
+                                                        className={`flex-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 resize-none ${errors.address ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-green-500"
+                                                            }`}
+                                                    />
+                                                </div>
+                                                {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
+                                                {errors.address?.type === "minLength" && <p className="text-red-500 text-sm">To Short</p>}
+                                                {errors.address?.type === "maxLength" && <p className="text-red-500 text-sm">To High</p>}
+
+                                                {/* অর্ডার নোট */}
+                                                <div className="flex flex-col md:flex-row md:items-start gap-3 w-full">
+                                                    <label className="md:w-40 w-full font-medium text-gray-700 mt-2">
+                                                        অর্ডার নোট:
+                                                    </label>
+                                                    <textarea
+                                                        {...register("note")}
+                                                        placeholder="অতিরিক্ত কোনো নির্দেশনা থাকলে লিখুন"
+                                                        rows="2"
+                                                        className="flex-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                                                    />
+                                                </div>
+
+                                                {/* ডেলিভারি অপশন */}
+                                                <div className="w-full">
+                                                    <label className="block font-medium text-gray-700 mb-2">
+                                                        ডেলিভারি এলাকা নির্বাচন করুন:
+                                                    </label>
+
+                                                    <div className="flex flex-col gap-3">
+                                                        {/* Option 1 */}
+                                                        <label
+                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === "dhakaCity"
+                                                                ? "border-green-500 bg-green-50"
+                                                                : "border-gray-300 bg-white"
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-2">
+                                                                <input
+                                                                    type="radio"
+                                                                    value="dhakaCity"
+                                                                    {...register("delivery", { required: "ডেলিভারি এলাকা নির্বাচন করুন" })}
+                                                                    onChange={(e) => setSelected(e.target.value)}
+                                                                    className="accent-green-600 w-4 h-4"
+                                                                />
+                                                                <span className="font-medium text-gray-800">
+                                                                    ঢাকা সিটির ভিতরে
+                                                                </span>
+                                                            </div>
+                                                            <span className="text-gray-700 font-semibold">৫০ টাকা</span>
+                                                        </label>
+
+                                                        {/* Option 2 */}
+                                                        <label
+                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === "outsideDhaka"
+                                                                ? "border-green-500 bg-green-50"
+                                                                : "border-gray-300 bg-white"
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-2">
+                                                                <input
+                                                                    type="radio"
+                                                                    value="outsideDhaka"
+                                                                    {...register("delivery", { required: "ডেলিভারি এলাকা নির্বাচন করুন" })}
+                                                                    onChange={(e) => setSelected(e.target.value)}
+                                                                    className="accent-green-600 w-4 h-4"
+                                                                />
+                                                                <span className="font-medium text-gray-800">
+                                                                    ঢাকা সিটির বাইরে
+                                                                </span>
+                                                            </div>
+                                                            <span className="text-gray-700 font-semibold">৮০ টাকা</span>
+                                                        </label>
+
+                                                        {/* Option 3 */}
+                                                        <label
+                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === "outsideDistrict"
+                                                                ? "border-green-500 bg-green-50"
+                                                                : "border-gray-300 bg-white"
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-2">
+                                                                <input
+                                                                    type="radio"
+                                                                    value="outsideDistrict"
+                                                                    {...register("delivery", { required: "ডেলিভারি এলাকা নির্বাচন করুন" })}
+                                                                    onChange={(e) => setSelected(e.target.value)}
+                                                                    className="accent-green-600 w-4 h-4"
+                                                                />
+                                                                <span className="font-medium text-gray-800">
+                                                                    ঢাকা জেলার বাইরে
+                                                                </span>
+                                                            </div>
+                                                            <span className="text-gray-700 font-semibold">১০০ টাকা</span>
+                                                        </label>
+                                                    </div>
+                                                    {errors.delivery && <p className="text-red-500 text-sm mt-2">{errors.delivery.message}</p>}
+                                                </div>
+
+                                                {/* Submit Button */}
+                                                <button
+                                                    type="submit"
+                                                    className="mt-6 w-full bg-[#FA582D] text-white py-3 rounded-xl font-semibold hover:bg-[#e14c22] transition"
+                                                >
+                                                    অর্ডার নিশ্চিত করুন
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-
-                                {/* Confirm Button */}
-                                <button
-                                    onClick={() => alert("Order Confirmed!")}
-                                    className="mt-6 w-full bg-[#FA582D] text-white py-3 rounded-xl font-semibold hover:bg-[#e14c22] transition"
-                                >
-                                    Confirm Order
-                                </button>
                             </div>
                         </motion.div>
                     </>

@@ -2,9 +2,23 @@ import { FaShoppingCart } from "react-icons/fa";
 import { GrFormView } from "react-icons/gr";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Card = ({ item }) => {
     const { name, presentPrice, pastPrice, image, _id } = item;
+    const [products, setProducts] = useState([]);
+    const [colorBtn, setColorBtn] = useState(false);
+
+    useEffect(() => {
+        const stored = localStorage.getItem("products");
+        if (stored) {
+            setProducts(JSON.parse(stored));
+        }
+    }, []);
+
+    const color = products.map(products => console.log(products));
+
+
 
     return (
         <Link to={`/product-details/${_id}`} className="w-full overflow-hidden rounded-lg">
