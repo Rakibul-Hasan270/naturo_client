@@ -81,8 +81,40 @@ const CartDrawer = ({ onClose }) => {
     const handleSubtraction = (product) => {
         setQuantities((prev) => {
             const current = prev[product._id] || 1;
-            if (current <= 1) return prev; // limit = 1
-            return { ...prev, [product._id]: current - 1 };
+            const newQuantity = current - 1;
+
+            if (newQuantity === 0) {
+                try {
+                    // 🔹 এখন ধরছি localStorage এ শুধু ID list আছে
+                    const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
+
+                    // শুধু ওই id বাদ দিচ্ছি
+                    const updatedProducts = storedProducts.filter(
+                        (id) => id !== product._id
+                    );
+
+                    // আবার save করছি
+                    localStorage.setItem("products", JSON.stringify(updatedProducts));
+
+                    // UI থেকেও remove করো
+                    setCartItems((prevItems) =>
+                        prevItems.filter((item) => item._id !== product._id)
+                    );
+
+                    Notiflix.Notify.success("Product removed from cart", { timeout: 1000 });
+                    console.log("✅ Removed from localStorage:", product._id);
+                } catch (error) {
+                    console.error("❌ Error updating localStorage:", error);
+                    Notiflix.Report.failure(
+                        "Error",
+                        "Failed to remove product. Please try again.",
+                        "OK"
+                    );
+                }
+            }
+
+            if (newQuantity < 0) return prev;
+            return { ...prev, [product._id]: newQuantity };
         });
     };
 
@@ -95,7 +127,7 @@ const CartDrawer = ({ onClose }) => {
 
     return (
         <div className="fixed inset-0 flex text-black justify-end z-50" onClick={handleCloseDrawer}>
-            <div className={`bg-white w-full md:w-[560px] h-full p-5 shadow-lg transform transition-transform duration-300 ${isClosing
+            <div className={`bg-white w-full md:w-[560px] h-full p-5 mb-10 shadow-lg transform transition-transform duration-300 ${isClosing
                 ? "translate-x-full"
                 : isOpening
                     ? "translate-x-full"

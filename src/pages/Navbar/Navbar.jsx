@@ -64,7 +64,7 @@ const Navbar = () => {
                         <img
                             src={logo}
                             alt="Naturo logo"
-                            className="h-12 w-auto object-contain"
+                            className="h-14 w-auto object-contain"
                         />
                     </Link>
 
@@ -113,7 +113,7 @@ const Navbar = () => {
 
                     {/* Search Results Dropdown */}
                     {searchData.length > 0 && (
-                        <div ref={desktopSearchRef} className="absolute left-1/2 top-[60px] transform -translate-x-1/2 ml-11 w-[1100px] bg-white text-black shadow-lg max-h-80 overflow-y-auto z-50 px-5">
+                        <div ref={desktopSearchRef} className="absolute left-1/2 top-[60px] transform -translate-x-1/2 ml-[52px] md:w-[1100px] bg-white text-black shadow-lg md:max-h-[500px] overflow-y-auto z-50 px-5">
                             <p className="text-xs text-gray-600 mt-1.5">Found {searchData.length} results for "{search}"</p>
                             {searchData.map(item => (
                                 <Link
