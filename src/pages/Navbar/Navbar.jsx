@@ -5,7 +5,6 @@ import { RxCross2 } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import CartDrawer from "../../components/CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
-import logo from "../../assets/Logo/logo.png";
 import toast from "react-hot-toast";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
@@ -18,7 +17,6 @@ const Navbar = () => {
     const desktopSearchRef = useRef(null);
     const navigate = useNavigate();
     const { start } = useLoadingBar();
-
 
     const handelSearch = event => {
         event.preventDefault();
@@ -70,7 +68,7 @@ const Navbar = () => {
                 <div className="flex items-center justify-between w-full md:w-auto">
                     <button onClick={handelNavigate} className="flex items-center">
                         <img
-                            src={logo}
+                            src="/public/Logo/logo.png"
                             alt="Naturo logo"
                             className="h-14 w-auto object-contain"
                         />

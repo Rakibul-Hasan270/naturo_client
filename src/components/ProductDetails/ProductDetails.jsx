@@ -11,7 +11,7 @@ const ProductDetails = () => {
     const product = useLoaderData();
     const { complete } = useLoadingBar();
     const { name, pastPrice, image, category, _id } = product;
-    const { setCartItems, drawerOpen, setDrawerOpen, refreshCart } = useContext(CartContext);
+    const { drawerOpen, setDrawerOpen, refreshCart } = useContext(CartContext);
     const [orderModalOpen, setOrderModalOpen] = useState(false);
     const [quantities, setQuantities] = useState(1);
     const [selected, setSelected] = useState("dhakaCity");
@@ -70,15 +70,13 @@ const ProductDetails = () => {
     };
 
 
-
-
     return (
-        <div className="max-w-7xl bg-[#FFFFFF] mx-auto mt-6 p-4 relative">
+        <div className="max-w-7xl bg-[#FFFFFF] mx-auto relative">
             <div className="md:flex items-center gap-12">
                 <figure>
-                    <img className="md:max-w-[600px] rounded-2xl" src={image} alt={name} />
+                    <img className="md:max-w-[600px] h-auto rounded-2xl" src={image} alt={name} />
                 </figure>
-                <div className="card-body relative z-50">
+                <div className="card-body relative">
                     <h2 className="text-2xl font-bold">{name}</h2>
 
                     <div className="flex items-center gap-3 mt-2">

@@ -16,7 +16,7 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
         },
         breakpoints: {
             "(max-width: 600px)": {
-                slides: { perView: 1, spacing: 10 }
+                slides: { perView: 2, spacing: 10 }
             },
             "(min-width: 768px)": {
                 slides: { perView: isInsideDrawer ? 2 : 3, spacing: isInsideDrawer ? 15 : 20 }
@@ -42,8 +42,8 @@ const CommonCartSection = ({ sectionTitle, sectionIcon, products, isLoading, sub
     if (isLoading) return <Loading />;
 
     return (
-        <div className={`my-8 ${isInsideDrawer ? "w-full" : "max-w-7xl mx-auto"}`}>
-            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-10 mb-4">
+        <div className={`md:my-8 ${isInsideDrawer ? "w-full" : "max-w-7xl mx-auto"}`}>
+            <div className="flex items-center gap-2 md:gap-10 mt-6 md:mt-16 md:mb-4">
                 <p className="text-xl md:text-3xl font-bold">{sectionTitle}</p>
                 <Link to={`/view-more/${sectionTitle}`} className="flex items-center gap-2 cursor-pointer text-lg">
                     {subTitle} {sectionIcon}

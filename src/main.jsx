@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import CartProvider from './provider/CartProvider/CartProvider.jsx'
 import { LoadingBarProvider } from './provider/LoadingBarProvider/LoadingBarProvider.jsx'
+import "keen-slider/keen-slider.min.css";
 
 const queryClient = new QueryClient();
 

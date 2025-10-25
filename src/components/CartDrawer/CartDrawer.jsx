@@ -107,6 +107,11 @@ const CartDrawer = ({ onClose }) => {
         return product.presentPrice * qty;
     };
 
+    const totalPrice = cartItems.reduce((total, item) => {
+        const quantity = quantities[item._id] || 1;
+        return total + item.presentPrice * quantity;
+    }, 0);
+
 
     return (
         <div className="fixed inset-0 flex text-black justify-end z-50" onClick={handleCloseDrawer}>
@@ -123,13 +128,13 @@ const CartDrawer = ({ onClose }) => {
                     <div className="md:flex items-center justify-between w-full">
                         <h2
                             onClick={handleCloseDrawer}
-                            className="text-[13px] md:flex items-center gap-2 cursor-pointer hidden"
+                            className="text-[13px] flex items-center gap-2 cursor-pointer"
                         >
-                            <IoArrowBack /> Continue Shopping
+                            <IoArrowBack /> <span className="font-semibold">Continue Shopping</span>
                         </h2>
-                        <div className="flex justify-between md:block mr-24">
-                            <h2 className="text-2xl font-bold">Your Cart</h2>
-                            <h2 className="md:hidden px-2 py-1 rounded-full flex items-center"><FaBangladeshiTakaSign className="text-xs"></FaBangladeshiTakaSign><span className="font-bold">{cartItems.reduce((p, c) => p + c.presentPrice, 0)}</span></h2>
+                        <div className="flex justify-between md:block mt-1.5 md:mr-24">
+                            <h2 className="text-xl md:text-2xl font-bold">Your Cart</h2>
+                            <h2 className="md:hidden px-2 py-1 rounded-full flex items-center"><FaBangladeshiTakaSign className="text-xs"></FaBangladeshiTakaSign><span className="font-bold">{totalPrice}</span></h2>
                         </div>
                         <h2 className="border-2 font-bold hidden md:block px-2 py-1 rounded-full">{cartItems.length}</h2>
                     </div>
@@ -158,7 +163,10 @@ const CartDrawer = ({ onClose }) => {
                                             className="w-18 h-18 object-cover rounded-md"
                                         />
                                         <div className="flex md:flex-col text-[18px] font-semibold justify-between md:w-[300px]">
-                                            <h2>{product.name}</h2>
+                                            <div className="">
+                                                <h2>{product.name}</h2>
+                                                <h2 className="font-medium text-xs flex md:hidden items-center gap-1"><FaBangladeshiTakaSign></FaBangladeshiTakaSign>{product.presentPrice}</h2>
+                                            </div>
 
                                             {/* ------------------  */}
                                             <div className="flex gap-3 mt-3.5">
@@ -173,8 +181,6 @@ const CartDrawer = ({ onClose }) => {
                                                     +
                                                 </p>
                                             </div>
-
-
                                         </div>
                                     </div>
                                     <div>
@@ -193,7 +199,7 @@ const CartDrawer = ({ onClose }) => {
                                     </div>
                                 </li>
                             ))}
-                            <div className="mt-12">
+                            <div className="mt-12 hidden md:block">
                                 <h2 className="text-3xl font-bold">You'll also love</h2>
                                 <div>
                                     <CommonCartSection products={products} isLoading={isLoading} isInsideDrawer={true}></CommonCartSection>
@@ -203,7 +209,7 @@ const CartDrawer = ({ onClose }) => {
                         </div>
                     )}
                 </div>
-                <div className="mt-5">
+                {cartItems.length > 0 && <div className="mt-5">
                     <div className="flex justify-between items-center mb-3">
                         <h2 className="text-xl font-semibold">Total</h2>
                         <h2 className="text-xl font-semibold flex items-center">
@@ -212,9 +218,9 @@ const CartDrawer = ({ onClose }) => {
                         </h2>
                     </div>
                     <button className="btn w-full bg-[#A0CA4F] border-0">Order Now</button>
-                </div>
+                </div>}
             </div>
-        </div>
+        </div >
     );
 };
 

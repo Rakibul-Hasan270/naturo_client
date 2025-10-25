@@ -23,20 +23,22 @@ const Home = () => {
             <Slider></Slider>
             <MarqueCategory></MarqueCategory>
 
-            {/* best sells section  */}
-            <CommonCartSection sectionTitle='OUR BEST SELLERS' products={products.filter(p => p.best_sell === true)} isLoading={isLoading}></CommonCartSection>
+            <div className="p-4">
+                {/* best sells section  */}
+                <CommonCartSection sectionTitle='OUR BEST SELLERS' products={products.filter(p => p.best_sell === true)} isLoading={isLoading}></CommonCartSection>
 
-            {/* Honey section  */}
-            <CommonCartSection sectionIcon={<IoIosArrowForward />} sectionTitle='Honey' subTitle='View More' products={products} isLoading={isLoading}></CommonCartSection>
+                {/* Honey section  */}
+                <CommonCartSection sectionIcon={<IoIosArrowForward />} sectionTitle='Honey' subTitle='View More' products={products} isLoading={isLoading}></CommonCartSection>
 
-            {/* Wellness section  */}
-            <CommonCartSection sectionIcon={<IoIosArrowForward />} sectionTitle='Wellness' subTitle='View More' products={products} isLoading={isLoading}></CommonCartSection>
+                {/* Wellness section  */}
+                <CommonCartSection sectionIcon={<IoIosArrowForward />} sectionTitle='Wellness' subTitle='View More' products={products} isLoading={isLoading}></CommonCartSection>
 
-            {/* all product section */}
-            <AllProduct></AllProduct>
+                {/* all product section */}
+                <AllProduct></AllProduct>
 
-            {/* recently viewed section  */}
-            {recentlyViewedProducts.length > 0 && <CommonCartSection sectionTitle='Recently Viewed' products={recentlyViewedProducts} isLoading={isLoading}></CommonCartSection>}
+                {/* recently viewed section  */}
+                {recentlyViewedProducts.length > 0 && <CommonCartSection sectionTitle='Recently Viewed' products={recentlyViewedProducts} isLoading={isLoading}></CommonCartSection>}
+            </div>
 
             {/* featured section  */}
             <FeaturedSection></FeaturedSection>

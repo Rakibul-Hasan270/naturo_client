@@ -16,28 +16,28 @@ const Card = ({ item }) => {
         }
     }, []);
 
-    const color = products.map(products => console.log(products));
+    // const color = products.map(products => console.log(products));
 
 
 
     return (
         <Link to={`/product-details/${_id}`} className="w-full overflow-hidden rounded-lg">
             <img
-                className="w-full h-56 object-cover object-center transition-transform duration-300 ease-in-out hover:scale-110"
+                className="w-full h-auto md:h-56 object-cover object-center transition-transform duration-300 ease-in-out hover:scale-110"
                 src={image}
                 alt={name}
             />
 
             <div className="flex">
-                <div className="flex-1 p-2 flex justify-center items-center bg-[#F2F2F2] border-r cursor-pointer">
+                <div className="flex-1 p-2 flex justify-center items-center bg-[#F2F2F2] border-r">
                     <GrFormView />
                 </div>
-                <div className="flex-1 p-2 flex justify-center items-center bg-[#F2F2F2] cursor-pointer">
+                <div className="flex-1 p-2 flex justify-center items-center bg-[#F2F2F2]">
                     <FaShoppingCart />
                 </div>
             </div>
 
-            <div className="px-3 py-4">
+            <div className="px-3 py-2">
                 <h1 className="h-6 truncate font-bold">
                     {name}
                 </h1>
