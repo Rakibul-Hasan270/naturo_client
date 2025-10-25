@@ -1,5 +1,6 @@
-import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn, FaPhone } from "react-icons/fa6";
+import { FaPhone } from "react-icons/fa6";
 import { MdEmail, MdLocationPin } from "react-icons/md";
+import logo from '../../../assets/Logo/logo.png';
 import fb from '../../../assets/sociaIcon/fb.png'
 import whats from '../../../assets/sociaIcon/whats.png'
 
@@ -9,7 +10,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-6 py-6 md:py-12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
                 {/* --- Left Section --- */}
                 <div>
-                    <img className="md:-mt-8" src="/public/Logo/logo.png" alt="" />
+                    <img className="md:-mt-8" src={logo} alt="" />
                     <p className="font-bold mb-8">Naturo - <span className="font-medium">BACK TO NATURE</span></p>
 
                     <div className="space-y-2">
@@ -56,7 +57,7 @@ const Footer = () => {
                     <div className="flex items-center gap-4 mt-6">
                         <img className=" rounded-full" src={fb} alt="" />
                         <img className=" rounded-full" src={whats} alt="" />
-                        
+
                     </div>
                 </div>
             </div>

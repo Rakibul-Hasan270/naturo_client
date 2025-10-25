@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CartDrawer from "../../components/CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
 import toast from "react-hot-toast";
+import logo from '../../assets/Logo/logo.png';
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
 
@@ -68,7 +69,7 @@ const Navbar = () => {
                 <div className="flex items-center justify-between w-full md:w-auto">
                     <button onClick={handelNavigate} className="flex items-center">
                         <img
-                            src="/public/Logo/logo.png"
+                            src={logo}
                             alt="Naturo logo"
                             className="h-14 w-auto object-contain"
                         />
