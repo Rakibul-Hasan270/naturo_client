@@ -125,7 +125,7 @@ const Navbar = () => {
                             {searchData.map(item => (
                                 <Link
                                     key={item._id}
-                                    to={`/product/${item._id}`}
+                                    to={`/product-details/${item._id}`}
                                     className="border-b border-gray-300 px-3 py-2 hover:bg-gray-100 flex items-center gap-2.5"
                                 >
                                     <img className="h-10 w-10" src={item.image} alt="" />
@@ -186,7 +186,7 @@ const Navbar = () => {
                                 {searchData.map(item => (
                                     <Link
                                         key={item._id}
-                                        to={`/product/${item._id}`}
+                                        to={`/product-details/${item._id}`}
                                         className="border-b border-gray-300 px-3 py-2 hover:bg-gray-100 flex items-center gap-2.5"
                                         onClick={() => setShowSearch(false)}
                                     >

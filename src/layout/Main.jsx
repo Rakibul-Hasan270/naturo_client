@@ -4,7 +4,7 @@ import Navbar from "../pages/Navbar/Navbar";
 import Footer from "../pages/shared/Footer/Footer";
 
 const Main = () => {
-    
+
     return (
         <div className="bg-white text-[#222222]">
             <MiniNavbar></MiniNavbar>
