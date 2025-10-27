@@ -15,7 +15,7 @@ const Main = () => {
 
             {/* -------- Fixed Side Button -------- */}
             <Link to="/dashboard/dashboard-home"
-                className=" fixed bottom-6 right-6 bg-red-600  flex items-center gap-3  text-white p-4 shadow-lg hover:bg-green-700 transition-all duration-300z-50"
+                className=" fixed bottom-6 right-6 z-50 bg-red-600  flex items-center gap-3  text-white p-4 shadow-lg hover:bg-green-700 transition-all duration-300z-50"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
                 <LuLayoutDashboard size={20} /> Dashboard
