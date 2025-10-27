@@ -24,12 +24,12 @@ const router = createBrowserRouter([
             {
                 path: '/product-details/:id',
                 element: <ProductDetails></ProductDetails>,
-                loader: ({ params }) => fetch(`https://naturo-server.vercel.app/items/${params.id}`)
+                loader: ({ params }) => fetch(`http://localhost:9000/items/${params.id}`)
             },
             {
                 path: '/view-more/:category',
                 element: <ViewMore></ViewMore>,
-                loader: ({ params }) => fetch(`https://naturo-server.vercel.app/categorys/${params.category}`)
+                loader: ({ params }) => fetch(`http://localhost:9000/categorys/${params.category}`)
             },
         ]
     },
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
             {
                 path: 'edit-product/:id',
                 element: <DashboardEditProduct></DashboardEditProduct>,
-                loader: ({ params }) => fetch(`https://naturo-server.vercel.app/items/${params.id}`)
+                loader: ({ params }) => fetch(`http://localhost:9000/items/${params.id}`)
             }
         ]
     }
