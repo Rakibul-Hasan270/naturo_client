@@ -10,7 +10,6 @@ const CartProvider = ({ children }) => {
         localStorage.setItem("products", JSON.stringify(cartItems));
     }, [cartItems]);
 
-    // 🔹 Listen for external updates (from other tabs/components)
     useEffect(() => {
         const handleStorageChange = (e) => {
             if (e.key === "products") {
@@ -22,7 +21,6 @@ const CartProvider = ({ children }) => {
         return () => window.removeEventListener("storage", handleStorageChange);
     }, []);
 
-    // 🔹 Add a manual refetch trigger (for same-tab updates)
     const refreshCart = () => {
         const updated = JSON.parse(localStorage.getItem("products")) || [];
         setCartItems(updated);

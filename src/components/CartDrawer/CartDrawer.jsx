@@ -205,7 +205,6 @@ const CartDrawer = ({ onClose }) => {
                                     <CommonCartSection products={products} isLoading={isLoading} isInsideDrawer={true}></CommonCartSection>
                                 </div>
                             </div>
-                            {/* ------------------------ */}
                         </div>
                     )}
                 </div>
@@ -217,7 +216,7 @@ const CartDrawer = ({ onClose }) => {
                             {cartItems.reduce((sum, product) => sum + getTotalPrice(product), 0)}
                         </h2>
                     </div>
-                    <button className="btn w-full bg-[#A0CA4F] border-0">Order Now</button>
+                    <button className="btn w-full bg-[#A0CA4F] text-white border-0">Order Now</button>  
                 </div>}
             </div>
         </div >

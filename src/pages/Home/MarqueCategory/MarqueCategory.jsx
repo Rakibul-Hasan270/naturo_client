@@ -25,7 +25,7 @@ const MarqueCategory = () => {
     },
     breakpoints: {
       "(max-width: 1024px)": {
-        slides: { perView: 6, spacing: 12 },
+        slides: { perView: 6, spacing: 20 },
       },
       "(max-width: 768px)": {
         slides: { perView: 4, spacing: 10 },
@@ -59,7 +59,7 @@ const MarqueCategory = () => {
   if (isLoading) return <Loading />;
   return (
     <div className="bg-[#CAE9D7] py-4">
-      <div ref={sliderRef} className="keen-slider max-w-7xl mx-auto">
+      <div ref={sliderRef} className="keen-slider max-w-7xl mx-auto flex justify-center">
         {uniqueCategories.map((item, i) => (
           <Link to={`/view-more/${item.category}`}
             key={i}

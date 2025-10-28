@@ -6,8 +6,11 @@ import { CartContext } from "../../provider/CartProvider/CartProvider";
 import { motion, AnimatePresence } from "motion/react"
 import { useForm } from "react-hook-form";
 import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
+import useAllItem from "../../hooks/useAllItem";
+import Loading from "../Loading/Loading";
 
 const ProductDetails = () => {
+    const [products, isLoading] = useAllItem();
     const product = useLoaderData();
     const { complete } = useLoadingBar();
     const { name, pastPrice, image, category, _id } = product;
@@ -16,6 +19,8 @@ const ProductDetails = () => {
     const [quantities, setQuantities] = useState(1);
     const [selected, setSelected] = useState("dhakaCity");
     const { register, formState: { errors }, handleSubmit } = useForm();
+    const [productList, setProductList] = useState([]);
+
 
     useEffect(() => {
         complete();
@@ -56,20 +61,57 @@ const ProductDetails = () => {
         });
     };
 
+    // const handleSubtraction = (product) => {
+    //     setQuantities((prev) => {
+    //         const current = prev[product._id] || 1;
+    //         if (current <= 1) return prev; // limit = 1
+    //         return { ...prev, [product._id]: current - 1 };
+    //     });
+    // };
     const handleSubtraction = (product) => {
         setQuantities((prev) => {
             const current = prev[product._id] || 1;
-            if (current <= 1) return prev; // limit = 1
-            return { ...prev, [product._id]: current - 1 };
+            const newQuantity = current - 1;
+            if (newQuantity === 0) {
+                try {
+                    const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
+                    const updatedProducts = storedProducts.filter(
+                        (id) => id !== product._id
+                    );
+                    localStorage.setItem("products", JSON.stringify(updatedProducts));
+                    setProductList((prevItems) =>
+                        prevItems.filter((item) => item._id !== product._id)
+                    );
+                    refreshCart();
+                } catch (error) {
+                    console.error("Error updating localStorage:", error);
+                }
+            }
+
+            if (newQuantity < 0) return prev;
+            return { ...prev, [product._id]: newQuantity };
         });
     };
+
 
     const getTotalPrice = (product) => {
         const qty = quantities[product._id] || 1;
         return product.presentPrice * qty;
     };
 
+    const handelOrderNow = (id) => {
+        setOrderModalOpen(true);
 
+        const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
+        const updatedProducts = storedProducts.includes(id) ? storedProducts : [...storedProducts, id];
+        localStorage.setItem("products", JSON.stringify(updatedProducts));
+        const matchedProduct = products.filter(p => updatedProducts.includes(p._id));
+
+        setProductList(matchedProduct);
+        refreshCart();
+    };
+
+    if (isLoading) return <Loading></Loading>;
     return (
         <div className="max-w-7xl bg-[#FFFFFF] mx-auto relative">
             <div className="md:flex items-center gap-12">
@@ -102,7 +144,7 @@ const ProductDetails = () => {
                             Add To Cart
                         </button>
                         <button
-                            onClick={() => setOrderModalOpen(true)}
+                            onClick={() => handelOrderNow(_id)}
                             className="btn border-0 bg-[#FA582D] text-[#FFFFFF] w-[47%] flex items-center gap-2"
                         >
                             <FaBagShopping /> Order Now
@@ -157,6 +199,77 @@ const ProductDetails = () => {
 
                                 {/* Content */}
                                 <div className="space-y-3 text-gray-700 mt-2">
+                                    {/* ------------------------------------------------------------- */}
+
+                                    <div className="mt-4 overflow-y-auto">
+                                        {productList.length === 0 ? (
+                                            setOrderModalOpen(false)
+                                        ) : (
+                                            <div className="space-y-3 text-gray-600">
+                                                {productList.map((product) => (
+                                                    <li
+                                                        key={product._id}
+                                                        className="p-3 shadow rounded-md flex items-center justify-between gap-3"
+                                                    >
+                                                        <div className="flex justify-between items-center w-full">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <img
+                                                                    src={product.image}
+                                                                    alt={product.name}
+                                                                    className="w-18 h-18 object-cover rounded-md"
+                                                                />
+                                                                <div>
+                                                                    <h2 className="text-[18px] font-semibold">{product.name}</h2>
+
+                                                                    <h2 className="font-semibold flex items-center gap-1">
+                                                                        <FaBangladeshiTakaSign />
+                                                                        {quantities[product._id] > 1 ? (
+                                                                            <>
+                                                                                {product.presentPrice} × {quantities[product._id]} ={" "}
+                                                                                <span>
+                                                                                    {product.presentPrice * quantities[product._id]}
+                                                                                </span>
+                                                                            </>
+                                                                        ) : (
+                                                                            <span>
+                                                                                {product.presentPrice * (quantities[product._id] || 1)}
+                                                                            </span>
+                                                                        )}
+                                                                    </h2>
+
+
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="flex gap-3">
+                                                                <p onClick={() => handleSubtraction(product)} className="border border-[#E5E7EB] text-[#8B8B8B] flex items-center justify-center w-8 h-8 cursor-pointer">
+                                                                    -
+                                                                </p>
+                                                                <p className="border border-[#E5E7EB] text-[#8B8B8B] flex items-center justify-center w-8 h-8 cursor-pointer text-xs">
+                                                                    {quantities[product._id] || 1}
+                                                                </p>
+                                                                <p onClick={() => handleAddition(product)} className={`border border-[#E5E7EB] text-[#8B8B8B] flex items-center justify-center w-8 h-8 cursor-pointer select-none ${(quantities[product._id] || 1) >= 5 ? "opacity-50 cursor-not-allowed" : ""
+                                                                    }`}>
+                                                                    +
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        {/* <div>
+                                                            <div className="hidden md:block">
+                                                                <h3 className="flex items-center">
+                                                                    <FaBangladeshiTakaSign className="text-xs" />
+                                                                    <span className="text-[#1B1B1B]">{getTotalPrice(product)}</span>
+                                                                </h3>
+                                                            </div>
+                                                        </div> */}
+                                                    </li>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* -------------------------------------------------------- */}
                                     <div className="flex justify-between">
                                         <h3 className="text-2xl font-bold">সর্বমোট</h3>
                                         <h3 className="text-xl font-semibold"> {quantities[product._id] || 1} TK</h3>
