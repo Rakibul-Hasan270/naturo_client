@@ -69,8 +69,8 @@ const Dashboard = () => {
             <div className="drawer-side bg-[#E5E5E5]">
                 <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
 
-                <div className="w-72 bg-[#FFFFFF] p-10">
-                    <div className="flex justify-center mb-11">
+                <div className="md:w-72 bg-[#FFFFFF] p-10">
+                    <div className="flex justify-center mb-6 md:mb-11">
                         <Link to='/' className="text-5xl text-black">
                             <FaPowerOff />
                         </Link>

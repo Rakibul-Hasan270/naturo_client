@@ -1,5 +1,5 @@
 import { FaBagShopping, FaBangladeshiTakaSign } from "react-icons/fa6";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import CartDrawer from "../CartDrawer/CartDrawer";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
@@ -24,6 +24,8 @@ const ProductDetails = () => {
     const [selected, setSelected] = useState(0);
     const [loading, setLoading] = useState(false);
     const axiosPublic = useAxiosPublic();
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         complete();
@@ -39,12 +41,14 @@ const ProductDetails = () => {
             deliveryCharge: data.delivery,
             delivey: 'Subarea Dhaka',
             status: 'pending',
-            orderAmount: getGrandTotal() + (selected || 0)
+            orderAmount: getGrandTotal() + (selected || 0),
+            date: new Date()
         }
         try {
             const result = await axiosPublic.post('/order', orderInfo);
             if (result.data.insertedId) {
                 toast.success(`Your order is pending Mr.${data.name}`)
+                navigate('/order-success');
             }
         } catch (err) {
             toast.error(err?.message);

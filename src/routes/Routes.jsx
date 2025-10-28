@@ -12,6 +12,7 @@ import DashboardEditProduct from "../pages/Dashboard/DashboardEditProduct/Dashbo
 import DashboardPayment from "../pages/Dashboard/DashboardPayment/DashboardPayment";
 import DashboardSetting from "../pages/Dashboard/DashboardSetting/DashboardSetting";
 import DashboardAddProduct from "../pages/Dashboard/DashboardAddProduct/DashboardAddProduct";
+import OrderSuccess from "../pages/OrderSuccess/OrderSuccess";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
                 element: <ViewMore></ViewMore>,
                 loader: ({ params }) => fetch(`http://localhost:9000/categorys/${params.category}`)
             },
+            {
+                path: '/order-success',
+                element: <OrderSuccess></OrderSuccess>
+            }
         ]
     },
     {

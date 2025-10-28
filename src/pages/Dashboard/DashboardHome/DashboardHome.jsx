@@ -1,11 +1,6 @@
-import { IoCaretDownSharp, IoCaretUpSharp, IoNotifications } from "react-icons/io5";
-import { IoIosNotifications } from "react-icons/io";
-import { FaMessage, FaUser } from "react-icons/fa6";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { RiCheckboxBlankCircleFill, RiCheckboxBlankCircleLine } from "react-icons/ri";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { CiMenuKebab } from "react-icons/ci";
-import { Link } from "react-router-dom";
 import img from '../../../assets/DashboardLogo/Vector.png'
 import img1 from '../../../assets/DashboardLogo/Vector (1).png'
 import img2 from '../../../assets/DashboardLogo/Vector (2).png'
@@ -25,7 +20,7 @@ const DashboardHome = () => {
 
     return (
         <div className="space-y-6">
-          <DashboardNavbar></DashboardNavbar>
+            <DashboardNavbar></DashboardNavbar>
 
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* ----- Shipped Orders ----- */}
