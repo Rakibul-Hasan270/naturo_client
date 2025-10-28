@@ -1,7 +1,7 @@
 import { MdOutlineEdit } from "react-icons/md";
 import Loading from "../../../components/Loading/Loading";
 import useAllItem from "../../../hooks/useAllItem";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaTrashAlt } from "react-icons/fa";
 import Notiflix from "notiflix";
 import { Link } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
@@ -24,7 +24,6 @@ const DashboardProduct = () => {
                         toast.success(`${product.name} has benn delete`);
                         refetch();
                     }
-                    Notiflix.Notify.success("Product removed from cart", { timeout: 1000 });
                 } catch (error) {
                     console.error(error);
                     Notiflix.Report.failure(
@@ -45,7 +44,12 @@ const DashboardProduct = () => {
     if (isLoading) return <Loading></Loading>
     return (
         <div className="text-gray-600">
-            <h2 className="text-xl md:text-3xl font-bold text-center">Total Product: {products.length}</h2>
+            <div className="flex items-center justify-between p-2 md:px-10">
+                <h2 className="text-xl md:text-3xl font-bold text-center">Total Products: {products.length}</h2>
+                <Link to='/dashboard/add-product'>
+                    <button className="btn"><FaPlus /> Add Product</button>
+                </Link>
+            </div>
 
             <div className="overflow-x-auto mt-5 md:mt-11">
                 <table className="table">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 
@@ -10,8 +10,9 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const DashboardEditProduct = () => {
     const product = useLoaderData();
     const axiosPublic = useAxiosPublic();
-    const { register, formState: { errors }, handleSubmit, reset } = useForm();
+    const { register, formState: { errors }, handleSubmit, reset } = useForm()
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         setLoading(true);
@@ -34,7 +35,7 @@ const DashboardEditProduct = () => {
                 toast.error(err?.message);
             }
         }
-        const updateInfo = { ...data, image: image || 'https://i.ibb.co.com/7JXwFp6k/pexels-ahmedadly-1270184.jpg'};
+        const updateInfo = { ...data, image: image || 'https://i.ibb.co.com/7JXwFp6k/pexels-ahmedadly-1270184.jpg' };
 
         try {
             const resUpdate = await axiosPublic.patch(`/items/${product._id}`, updateInfo);
@@ -48,11 +49,12 @@ const DashboardEditProduct = () => {
         }
         finally {
             setLoading(false);
+            navigate('/dashboard/products')
         }
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full text-gray-600">
             <h2 className="text-xl md:text-3xl font-bold text-center mb-6 md:mt-14">Edit Product</h2>
             <div className="md:p-20">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -62,7 +64,7 @@ const DashboardEditProduct = () => {
                         <label className="block mb-1 font-semibold">Product Name</label>
                         <input
                             defaultValue={product.name}
-                            {...register("name")}
+                            {...register("name", { required: true })}
                             type="text"
                             placeholder="Free Health Camp for Rural Families"
                             className="w-full border p-2 rounded"
@@ -74,7 +76,7 @@ const DashboardEditProduct = () => {
                         <label className="block mb-1 font-semibold">Category</label>
                         <select
                             defaultValue={product?.category}
-                            {...register("category")}
+                            {...register("category", { required: true })}
                             className="w-full border p-2 rounded bg-white text-gray-800 dark:bg-gray-800 dark:text-white"
                         >
                             <option value="">Select a category</option>
@@ -91,7 +93,7 @@ const DashboardEditProduct = () => {
                     {/* image fild  */}
                     <div>
                         <input
-                            {...register('image')}
+                            {...register('image', { required: true })}
                             type="file"
                             id="image"
                             className="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg 
@@ -101,6 +103,7 @@ const DashboardEditProduct = () => {
                focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 
                dark:focus:border-blue-300"
                         />
+                        {errors.image && <span className="text-xs text-red-600">Image is required</span>}
                     </div>
 
                     {/* present price */}
@@ -108,7 +111,7 @@ const DashboardEditProduct = () => {
                         <label className="block mb-1 font-semibold">Present Price</label>
                         <input
                             defaultValue={product.presentPrice}
-                            {...register("presentPrice")}
+                            {...register("presentPrice", { required: true })}
                             type="number"
                             placeholder=""
                             className="w-full border p-2 rounded"
@@ -118,11 +121,11 @@ const DashboardEditProduct = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-[#A0CA4F] text-white py-2 rounded font-semibold transition"
+                        className="w-full py-2 rounded font-semibold transition bg-[#A0CA4F] text-white"
                     >
                         {loading ? (
                             <div className="flex items-center justify-center gap-2">
-                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                 </svg>
