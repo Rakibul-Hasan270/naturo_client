@@ -37,7 +37,9 @@ const ProductDetails = () => {
             address: data.address,
             note: data.note,
             deliveryCharge: data.delivery,
-            delivey: 'Subarea Dhaka'
+            delivey: 'Subarea Dhaka',
+            status: 'pending',
+            orderAmount: getGrandTotal() + (selected || 0)
         }
         try {
             const result = await axiosPublic.post('/order', orderInfo);
