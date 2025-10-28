@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { useLoadingBar } from "../../provider/LoadingBarProvider/LoadingBarProvider";
 import useAllItem from "../../hooks/useAllItem";
 import Loading from "../Loading/Loading";
+import toast from "react-hot-toast";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const ProductDetails = () => {
     const [products, isLoading] = useAllItem();
@@ -17,18 +19,40 @@ const ProductDetails = () => {
     const { drawerOpen, setDrawerOpen, refreshCart } = useContext(CartContext);
     const [orderModalOpen, setOrderModalOpen] = useState(false);
     const [quantities, setQuantities] = useState(1);
-    const [selected, setSelected] = useState("dhakaCity");
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [productList, setProductList] = useState([]);
-
+    const [selected, setSelected] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const axiosPublic = useAxiosPublic();
 
     useEffect(() => {
         complete();
     }, [complete])
 
-    const onSubmit = (data) => {
-        console.log("Order Info:", data);
+    const onSubmit = async (data) => {
+        setLoading(true);
+        const orderInfo = {
+            name: data.name,
+            mobile: data.mobile,
+            address: data.address,
+            note: data.note,
+            deliveryCharge: data.delivery,
+            delivey: 'Subarea Dhaka'
+        }
+        try {
+            const result = await axiosPublic.post('/order', orderInfo);
+            if (result.data.insertedId) {
+                toast.success(`Your order is pending Mr.${data.name}`)
+            }
+        } catch (err) {
+            toast.error(err?.message);
+            console.log(err?.message);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    console.log(selected);
 
     // save recently viewed product
     useEffect(() => {
@@ -61,13 +85,6 @@ const ProductDetails = () => {
         });
     };
 
-    // const handleSubtraction = (product) => {
-    //     setQuantities((prev) => {
-    //         const current = prev[product._id] || 1;
-    //         if (current <= 1) return prev; // limit = 1
-    //         return { ...prev, [product._id]: current - 1 };
-    //     });
-    // };
     const handleSubtraction = (product) => {
         setQuantities((prev) => {
             const current = prev[product._id] || 1;
@@ -93,20 +110,24 @@ const ProductDetails = () => {
         });
     };
 
-
     const getTotalPrice = (product) => {
         const qty = quantities[product._id] || 1;
         return product.presentPrice * qty;
     };
 
+    const getGrandTotal = () => {
+        return productList.reduce((total, product) => {
+            const qty = quantities[product._id] || 1;
+            return total + product.presentPrice * qty;
+        }, 0);
+    };
+
     const handelOrderNow = (id) => {
         setOrderModalOpen(true);
-
         const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
         const updatedProducts = storedProducts.includes(id) ? storedProducts : [...storedProducts, id];
         localStorage.setItem("products", JSON.stringify(updatedProducts));
         const matchedProduct = products.filter(p => updatedProducts.includes(p._id));
-
         setProductList(matchedProduct);
         refreshCart();
     };
@@ -237,8 +258,6 @@ const ProductDetails = () => {
                                                                         )}
                                                                     </h2>
 
-
-
                                                                 </div>
                                                             </div>
 
@@ -255,25 +274,29 @@ const ProductDetails = () => {
                                                                 </p>
                                                             </div>
                                                         </div>
-                                                        {/* <div>
-                                                            <div className="hidden md:block">
-                                                                <h3 className="flex items-center">
-                                                                    <FaBangladeshiTakaSign className="text-xs" />
-                                                                    <span className="text-[#1B1B1B]">{getTotalPrice(product)}</span>
-                                                                </h3>
-                                                            </div>
-                                                        </div> */}
                                                     </li>
                                                 ))}
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* -------------------------------------------------------- */}
-                                    <div className="flex justify-between">
-                                        <h3 className="text-2xl font-bold">সর্বমোট</h3>
-                                        <h3 className="text-xl font-semibold"> {quantities[product._id] || 1} TK</h3>
+                                    {/* grnd total + delevery charge */}
+                                    <div className="bg-gray-100 p-5">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-[19px] font-semibold">মোট: </p>
+                                            <p className="text-[18px] font-bold">{getGrandTotal()} TK</p>
+                                        </div>
+                                        <div className="flex items-center justify-between border-gray-300 border-b pb-2">
+                                            <p className="text-[19px] font-semibold">ডেলিভারি চার্জ: </p>
+                                            <p className="text-[18px] font-bold">{selected} TK</p>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-xl font-semibold">সর্বমোট</p>
+                                            <p className="text-[18px] font-bold"> {getGrandTotal() + (selected || 0)} TK</p>
+                                        </div>
                                     </div>
+
+                                    {/* -------------------------------------------------------- */}
 
                                     {/* Example form fields */}
                                     <div className="mt-4 space-y-3">
@@ -359,7 +382,7 @@ const ProductDetails = () => {
                                                     <div className="flex flex-col gap-3">
                                                         {/* Option 1 */}
                                                         <label
-                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === "dhakaCity"
+                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === 50
                                                                 ? "border-green-500 bg-green-50"
                                                                 : "border-gray-300 bg-white"
                                                                 }`}
@@ -367,9 +390,9 @@ const ProductDetails = () => {
                                                             <div className="flex items-center gap-2">
                                                                 <input
                                                                     type="radio"
-                                                                    value="dhakaCity"
+                                                                    value={50}
                                                                     {...register("delivery", { required: "ডেলিভারি এলাকা নির্বাচন করুন" })}
-                                                                    onChange={(e) => setSelected(e.target.value)}
+                                                                    onChange={(e) => setSelected(Number(e.target.value))} // number হিসেবে রাখছি
                                                                     className="accent-green-600 w-4 h-4"
                                                                 />
                                                                 <span className="font-medium text-gray-800">
@@ -381,7 +404,7 @@ const ProductDetails = () => {
 
                                                         {/* Option 2 */}
                                                         <label
-                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === "outsideDhaka"
+                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === 80
                                                                 ? "border-green-500 bg-green-50"
                                                                 : "border-gray-300 bg-white"
                                                                 }`}
@@ -389,9 +412,9 @@ const ProductDetails = () => {
                                                             <div className="flex items-center gap-2">
                                                                 <input
                                                                     type="radio"
-                                                                    value="outsideDhaka"
+                                                                    value={80}
                                                                     {...register("delivery", { required: "ডেলিভারি এলাকা নির্বাচন করুন" })}
-                                                                    onChange={(e) => setSelected(e.target.value)}
+                                                                    onChange={(e) => setSelected(Number(e.target.value))}
                                                                     className="accent-green-600 w-4 h-4"
                                                                 />
                                                                 <span className="font-medium text-gray-800">
@@ -403,7 +426,7 @@ const ProductDetails = () => {
 
                                                         {/* Option 3 */}
                                                         <label
-                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === "outsideDistrict"
+                                                            className={`flex justify-between items-center border rounded-lg px-4 py-2 cursor-pointer transition ${selected === 100
                                                                 ? "border-green-500 bg-green-50"
                                                                 : "border-gray-300 bg-white"
                                                                 }`}
@@ -411,9 +434,9 @@ const ProductDetails = () => {
                                                             <div className="flex items-center gap-2">
                                                                 <input
                                                                     type="radio"
-                                                                    value="outsideDistrict"
+                                                                    value={100}
                                                                     {...register("delivery", { required: "ডেলিভারি এলাকা নির্বাচন করুন" })}
-                                                                    onChange={(e) => setSelected(e.target.value)}
+                                                                    onChange={(e) => setSelected(Number(e.target.value))}
                                                                     className="accent-green-600 w-4 h-4"
                                                                 />
                                                                 <span className="font-medium text-gray-800">
@@ -423,15 +446,23 @@ const ProductDetails = () => {
                                                             <span className="text-gray-700 font-semibold">১০০ টাকা</span>
                                                         </label>
                                                     </div>
-                                                    {errors.delivery && <p className="text-red-500 text-sm mt-2">{errors.delivery.message}</p>}
+
+                                                    {errors.delivery && (
+                                                        <p className="text-red-500 text-sm mt-2">
+                                                            {errors.delivery.message}
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 {/* Submit Button */}
                                                 <button
                                                     type="submit"
+                                                    disabled={loading}
                                                     className="cursor-pointer mt-6 w-full bg-[#FA582D] text-white py-3 rounded-xl font-semibold hover:bg-[#e14c22] transition"
                                                 >
-                                                    অর্ডার নিশ্চিত করুন
+                                                    {
+                                                        loading ? 'অর্ডার কনফার্ম করা হচ্ছে' : `অর্ডার নিশ্চিত করুন  ${getGrandTotal() + (selected || 0)} TK`
+                                                    }
                                                 </button>
                                             </form>
                                         </div>
