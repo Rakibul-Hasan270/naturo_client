@@ -6,6 +6,7 @@ import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import Notiflix from "notiflix";
 import CommonCartSection from "../CommonCartSection/CommonCartSection";
 import { CartContext } from "../../provider/CartProvider/CartProvider";
+import Checkout from "../Checkout/Checkout";
 
 const CartDrawer = ({ onClose }) => {
     const [products, isLoading] = useAllItem();
@@ -14,6 +15,7 @@ const CartDrawer = ({ onClose }) => {
     const [isOpening, setIsOpening] = useState(true);
     const [quantities, setQuantities] = useState(1);
     const { refreshCart } = useContext(CartContext);
+    const [orderModalOpen, setOrderModalOpen] = useState(false);
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("products")) || [];
@@ -29,7 +31,6 @@ const CartDrawer = ({ onClose }) => {
         });
         setQuantities(initialQuantities);
     }, [cartItems]);
-
 
     const handelDeleteProduct = (id) => {
         Notiflix.Confirm.show(
@@ -111,6 +112,10 @@ const CartDrawer = ({ onClose }) => {
         const quantity = quantities[item._id] || 1;
         return total + item.presentPrice * quantity;
     }, 0);
+
+    const handelModalOpen = () => {
+        setOrderModalOpen(true);
+    }
 
 
     return (
@@ -216,9 +221,10 @@ const CartDrawer = ({ onClose }) => {
                             {cartItems.reduce((sum, product) => sum + getTotalPrice(product), 0)}
                         </h2>
                     </div>
-                    <button className="btn w-full bg-[#A0CA4F] text-white border-0">Order Now</button>  
+                    <button onClick={handelModalOpen} className="btn w-full bg-[#A0CA4F] text-white border-0">Order Now</button>
                 </div>}
             </div>
+            <Checkout orderModalOpen={orderModalOpen} setOrderModalOpen={setOrderModalOpen} productList={cartItems} quantities={quantities} handleAddition={handleAddition} handleSubtraction={handleSubtraction} />
         </div >
     );
 };
