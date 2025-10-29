@@ -6,7 +6,6 @@ import img1 from '../../../assets/DashboardLogo/Vector (1).png'
 import img2 from '../../../assets/DashboardLogo/Vector (2).png'
 import DashboardNavbar from "../../../components/DashboardNavbar/DashboardNavbar";
 
-
 const DashboardHome = () => {
     const data = [
         { name: "Mon", previous: 10, current: 10 },
